@@ -22,5 +22,23 @@
     "name": "Baari Training Gear #004",
     "price": "Ksh 4,000",
     "img": "images/equipments/equipments-004.jpg"
+  },
+  {
+    "id": "equ-005",
+    "name": "Baari Training Gear #005",
+    "price": "Ksh 4,000",
+    "img": "images/equipments/equipments-005.jpg"
+  },
+  {
+    "id": "equ-006",
+    "name": "Baari Training Gear #006",
+    "price": "Ksh 4,000",
+    "img": "images/equipments/equipments-006.jpg"
+  },
+  {
+    "id": "equ-007",
+    "name": "Baari Training Gear #007",
+    "price": "Ksh 4,000",
+    "img": "images/equipments/equipments-007.jpg"
   }
 ]

@@ -3,46 +3,43 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Jersey Locker — BAARI SPORTS CENTER · Digital Shelves</title>
+  <title>Catalogue — BAARI SPORTS CENTER</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;0,900;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <!-- ═══════════════════════════════════════════
-       NAVIGATION BAR
-  ═══════════════════════════════════════════ -->
-  <header class="nav-header" id="navHeader">
-    <div class="nav-inner">
+  <!-- ══════════════════════════════════
+       NAVIGATION
+  ══════════════════════════════════ -->
+  <header class="nav" id="nav">
+    <div class="nav__inner">
 
-      <!-- Logo -->
-      <a class="nav-logo" href="index.html" aria-label="Baari Sports Center — Home">
-        <span class="logo-qs">BSC</span>
-        <div class="logo-text">
-          <span class="logo-main">BAARI SPORTS CENTER</span>
-          <span class="logo-sub">Digital Shelves · Kimana</span>
-        </div>
+      <a class="nav__logo" href="index.html" aria-label="Baari Sports Center home">
+        <span class="nav__logo-mark">BSC</span>
+        <span class="nav__logo-text">
+          <span class="nav__logo-name">BAARI SPORTS</span>
+          <span class="nav__logo-loc">Kimana · Digital Shelves</span>
+        </span>
       </a>
 
-      <!-- Desktop nav links -->
-      <nav class="nav-links" aria-label="Primary navigation">
-        <a class="nav-link" href="index.html" data-page="index.html">Our Story</a>
-        <a class="nav-link" href="catalogue.html" data-page="catalogue.html">Shop Catalogue</a>
+      <nav class="nav__links" aria-label="Site navigation">
+        <a class="nav__link" href="index.html">Our Story</a>
+        <a class="nav__link nav__link--active" href="catalogue.html">Catalogue</a>
       </nav>
 
-      <!-- Actions -->
-      <div class="nav-actions">
-        <button class="cart-trigger" id="cartTrigger" aria-label="Open kit bag">
-          <svg class="cart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <div class="nav__actions">
+        <button class="nav__cart-btn" id="cartTrigger" aria-label="Open kit bag">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
             <line x1="3" y1="6" x2="21" y2="6"/>
             <path d="M16 10a4 4 0 01-8 0"/>
           </svg>
-          <span class="cart-badge" id="cartBadge">0</span>
+          <span class="nav__cart-count" id="cartBadge">0</span>
         </button>
-        <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+        <button class="nav__hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
           <span></span><span></span><span></span>
         </button>
       </div>
@@ -50,395 +47,156 @@
     </div>
   </header>
 
-  <!-- Mobile nav overlay -->
-  <div class="mobile-nav-overlay" id="mobileNavOverlay" role="dialog" aria-modal="true" aria-label="Mobile navigation">
-    <button class="mobile-nav-close" id="mobileNavClose" aria-label="Close menu">✕</button>
-    <a class="mobile-nav-link" href="index.html" data-page="index.html">Our Story</a>
-    <a class="mobile-nav-link" href="catalogue.html" data-page="catalogue.html">Shop Catalogue</a>
+  <!-- Mobile overlay -->
+  <div class="mobile-nav" id="mobileNav" role="dialog" aria-modal="true" aria-label="Mobile navigation">
+    <button class="mobile-nav__close" id="mobileNavClose" aria-label="Close menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <a class="mobile-nav__link" href="index.html">Our Story</a>
+    <a class="mobile-nav__link mobile-nav__link--active" href="catalogue.html">Catalogue</a>
   </div>
 
 
-  <!-- ═══════════════════════════════════════════
-       SHOP HERO BANNER
-  ═══════════════════════════════════════════ -->
-  <div class="shop-banner">
-    <div class="shop-banner-inner">
-      <div class="shop-banner-left">
-        <span class="shop-banner-eyebrow">
-          <span class="eyebrow-dot" aria-hidden="true"></span>
-          Jersey Locker · Custom Name &amp; Number · 48hr Print
-        </span>
-        <h1 class="shop-banner-title">The Jersey<br /><em>Locker</em></h1>
+  <!-- ══════════════════════════════════
+       PAGE HERO
+  ══════════════════════════════════ -->
+  <section class="page-hero">
+    <div class="page-hero__inner">
+      <div class="page-hero__label">
+        <span class="pulse-dot" aria-hidden="true"></span>
+        Baari Sports Center · Kimana · Live Catalogue
       </div>
-      <div class="shop-banner-right">
-        <p class="shop-banner-desc">Stadium-grade kits for every occasion. Pick your club, customise your name and number, and checkout in seconds via WhatsApp.</p>
-        <div class="shop-sort-row">
-          <span class="shop-count" id="shopProductCount">6 kits</span>
-        </div>
-      </div>
+      <h1 class="page-hero__title">
+        <span class="page-hero__title-line">Digital</span>
+        <span class="page-hero__title-line page-hero__title-line--accent">Shelves</span>
+      </h1>
+      <p class="page-hero__desc">Stadium-grade gear. Custom prints. WhatsApp checkout in seconds.</p>
+    </div>
+    <div class="page-hero__scroll-hint" aria-hidden="true">scroll</div>
+  </section>
+
+
+  <!-- ══════════════════════════════════
+       CATEGORY TABS
+  ══════════════════════════════════ -->
+  <div class="cat-bar" role="tablist" aria-label="Product categories">
+    <div class="cat-bar__inner">
+      <button class="cat-pill cat-pill--active" role="tab" aria-selected="true"  data-category="boots"      id="tab-boots">
+        <span class="cat-pill__icon" aria-hidden="true">👟</span> Boots
+      </button>
+      <button class="cat-pill" role="tab" aria-selected="false" data-category="jerseys"    id="tab-jerseys">
+        <span class="cat-pill__icon" aria-hidden="true">👕</span> Jerseys
+      </button>
+      <button class="cat-pill" role="tab" aria-selected="false" data-category="equipments" id="tab-equipments">
+        <span class="cat-pill__icon" aria-hidden="true">⚽</span> Training Gear
+      </button>
+      <div class="cat-bar__indicator" id="catIndicator" aria-hidden="true"></div>
     </div>
   </div>
 
 
-  <!-- ═══════════════════════════════════════════
-       JERSEY GRID
-  ═══════════════════════════════════════════ -->
-  <div class="shelf shelf--jerseys" id="jerseys">
+  <!-- ══════════════════════════════════
+       PRODUCT GRID
+  ══════════════════════════════════ -->
+  <main class="catalogue" id="catalogue" role="main">
 
-    <div class="jerseys-stadium-bg" aria-hidden="true">
-      <div class="stadium-lines"></div>
+    <!-- Status bar -->
+    <div class="catalogue__status" id="catalogueStatus" aria-live="polite">
+      <span class="catalogue__status-text" id="statusText">Loading…</span>
     </div>
 
-    <div class="jersey-custom-notice" role="note">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
-      Enter your custom name &amp; number below each jersey to personalise your kit. Fields are optional — leave blank for a plain jersey.
+    <!-- Skeleton loader (shown while fetching) -->
+    <div class="product-grid" id="skeletonGrid" aria-hidden="true">
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
     </div>
 
-    <!-- ─── PRODUCT GRID ─── -->
-    <div class="product-grid product-grid--jerseys" id="jerseysGrid">
+    <!-- Real product grid (populated by JS) -->
+    <div class="product-grid" id="productGrid" aria-label="Products"></div>
 
-      <!-- ─── JERSEY: Arsenal ─── -->
-      <article class="product-card product-card--jersey" data-id="j1" data-name="Arsenal Home Jersey" data-price="2500" data-category="jersey">
-        <div class="product-media product-media--jersey">
-          <div class="product-img-wrap img-skeleton" style="--aspect: 3/4;">
-            <picture>
-              <source srcset="assets/jerseys/arsenal-home.webp" type="image/webp" />
-              <img src="assets/jerseys/arsenal-home.jpg" alt="Arsenal Home Jersey 2024/25 — official grade breathable dri-fit"
-                   width="300" height="400" loading="lazy" class="product-img"
-                   onerror="this.closest('.product-img-wrap').classList.add('img-fallback')" />
-            </picture>
-          </div>
-          <div class="jersey-club">Arsenal FC</div>
-          <div class="product-badge product-badge--new">2024/25</div>
-        </div>
-        <div class="product-info">
-          <h2 class="product-name">Arsenal Home Jersey</h2>
-          <p class="product-detail">Official grade · Breathable Dri-fit · Heat-seal badge</p>
-          <div class="product-price">Ksh 2,500</div>
-          <div class="size-selector">
-            <span class="size-label">Size:</span>
-            <div class="sizes">
-              <button class="size-btn" data-size="S">S</button>
-              <button class="size-btn" data-size="M">M</button>
-              <button class="size-btn" data-size="L">L</button>
-              <button class="size-btn" data-size="XL">XL</button>
-            </div>
-          </div>
-          <div class="jersey-custom-fields">
-            <div class="custom-field-group">
-              <label class="custom-field-label">Custom Name (optional)</label>
-              <input type="text" class="custom-name-input" placeholder="e.g. SAKA" maxlength="20" />
-            </div>
-            <div class="custom-field-group">
-              <label class="custom-field-label">Custom Number (optional)</label>
-              <input type="text" class="custom-number-input" placeholder="e.g. 7" maxlength="3" />
-            </div>
-          </div>
-          <button class="add-to-cart-btn add-to-cart-btn--jersey">+ Add to Kit Bag</button>
-        </div>
-      </article>
+    <!-- Error / empty state -->
+    <div class="empty-state hidden" id="emptyState">
+      <div class="empty-state__icon" aria-hidden="true">📦</div>
+      <h3 class="empty-state__title">Nothing here yet</h3>
+      <p class="empty-state__desc">This category is still being stocked. Check back soon or browse another.</p>
+    </div>
 
-      <!-- ─── JERSEY: Man City ─── -->
-      <article class="product-card product-card--jersey" data-id="j2" data-name="Manchester City Home Jersey" data-price="2500" data-category="jersey">
-        <div class="product-media product-media--jersey">
-          <div class="product-img-wrap img-skeleton" style="--aspect: 3/4;">
-            <picture>
-              <source srcset="assets/jerseys/mancity-home.webp" type="image/webp" />
-              <img src="assets/jerseys/mancity-home.jpg" alt="Manchester City Home Jersey 2024/25 — breathable Dri-fit with Puma badge"
-                   width="300" height="400" loading="lazy" class="product-img"
-                   onerror="this.closest('.product-img-wrap').classList.add('img-fallback')" />
-            </picture>
-          </div>
-          <div class="jersey-club">Man City</div>
-          <div class="product-badge">2024/25</div>
-        </div>
-        <div class="product-info">
-          <h2 class="product-name">Manchester City Home Jersey</h2>
-          <p class="product-detail">Official grade · Breathable Dri-fit · Puma badge</p>
-          <div class="product-price">Ksh 2,500</div>
-          <div class="size-selector">
-            <span class="size-label">Size:</span>
-            <div class="sizes">
-              <button class="size-btn" data-size="S">S</button>
-              <button class="size-btn" data-size="M">M</button>
-              <button class="size-btn" data-size="L">L</button>
-              <button class="size-btn" data-size="XL">XL</button>
-            </div>
-          </div>
-          <div class="jersey-custom-fields">
-            <div class="custom-field-group">
-              <label class="custom-field-label">Custom Name (optional)</label>
-              <input type="text" class="custom-name-input" placeholder="e.g. HAALAND" maxlength="20" />
-            </div>
-            <div class="custom-field-group">
-              <label class="custom-field-label">Custom Number (optional)</label>
-              <input type="text" class="custom-number-input" placeholder="e.g. 9" maxlength="3" />
-            </div>
-          </div>
-          <button class="add-to-cart-btn add-to-cart-btn--jersey">+ Add to Kit Bag</button>
-        </div>
-      </article>
-
-      <!-- ─── JERSEY: Real Madrid ─── -->
-      <article class="product-card product-card--jersey" data-id="j3" data-name="Real Madrid Away Jersey" data-price="2800" data-category="jersey">
-        <div class="product-media product-media--jersey">
-          <div class="product-img-wrap img-skeleton" style="--aspect: 3/4;">
-            <picture>
-              <source srcset="assets/jerseys/realmadrid-away.webp" type="image/webp" />
-              <img src="assets/jerseys/realmadrid-away.jpg" alt="Real Madrid Away Jersey 2024/25 — Adidas Authentic AeroReady"
-                   width="300" height="400" loading="lazy" class="product-img"
-                   onerror="this.closest('.product-img-wrap').classList.add('img-fallback')" />
-            </picture>
-          </div>
-          <div class="jersey-club">Real Madrid</div>
-          <div class="product-badge product-badge--new">2024/25</div>
-        </div>
-        <div class="product-info">
-          <h2 class="product-name">Real Madrid Away Jersey</h2>
-          <p class="product-detail">Adidas Authentic · AeroReady tech · Club crest</p>
-          <div class="product-price">Ksh 2,800</div>
-          <div class="size-selector">
-            <span class="size-label">Size:</span>
-            <div class="sizes">
-              <button class="size-btn" data-size="S">S</button>
-              <button class="size-btn" data-size="M">M</button>
-              <button class="size-btn" data-size="L">L</button>
-              <button class="size-btn" data-size="XL">XL</button>
-            </div>
-          </div>
-          <div class="jersey-custom-fields">
-            <div class="custom-field-group">
-              <label class="custom-field-label">Custom Name (optional)</label>
-              <input type="text" class="custom-name-input" placeholder="e.g. VINICIUS" maxlength="20" />
-            </div>
-            <div class="custom-field-group">
-              <label class="custom-field-label">Custom Number (optional)</label>
-              <input type="text" class="custom-number-input" placeholder="e.g. 7" maxlength="3" />
-            </div>
-          </div>
-          <button class="add-to-cart-btn add-to-cart-btn--jersey">+ Add to Kit Bag</button>
-        </div>
-      </article>
-
-      <!-- ─── JERSEY: Barcelona ─── -->
-      <article class="product-card product-card--jersey" data-id="j4" data-name="Barcelona Home Jersey" data-price="2500" data-category="jersey">
-        <div class="product-media product-media--jersey">
-          <div class="product-img-wrap img-skeleton" style="--aspect: 3/4;">
-            <picture>
-              <source srcset="assets/jerseys/barcelona-home.webp" type="image/webp" />
-              <img src="assets/jerseys/barcelona-home.jpg" alt="Barcelona Home Jersey 2024/25 — Nike Dri-FIT ADV blaugrana"
-                   width="300" height="400" loading="lazy" class="product-img"
-                   onerror="this.closest('.product-img-wrap').classList.add('img-fallback')" />
-            </picture>
-          </div>
-          <div class="jersey-club">FC Barcelona</div>
-          <div class="product-badge product-badge--sale">POPULAR</div>
-        </div>
-        <div class="product-info">
-          <h2 class="product-name">Barcelona Home Jersey</h2>
-          <p class="product-detail">Nike Dri-FIT ADV · Blaugrana stripes · Stadium fit</p>
-          <div class="product-price">Ksh 2,500</div>
-          <div class="size-selector">
-            <span class="size-label">Size:</span>
-            <div class="sizes">
-              <button class="size-btn" data-size="S">S</button>
-              <button class="size-btn" data-size="M">M</button>
-              <button class="size-btn" data-size="L">L</button>
-              <button class="size-btn" data-size="XL">XL</button>
-            </div>
-          </div>
-          <div class="jersey-custom-fields">
-            <div class="custom-field-group">
-              <label class="custom-field-label">Custom Name (optional)</label>
-              <input type="text" class="custom-name-input" placeholder="e.g. YAMAL" maxlength="20" />
-            </div>
-            <div class="custom-field-group">
-              <label class="custom-field-label">Custom Number (optional)</label>
-              <input type="text" class="custom-number-input" placeholder="e.g. 27" maxlength="3" />
-            </div>
-          </div>
-          <button class="add-to-cart-btn add-to-cart-btn--jersey">+ Add to Kit Bag</button>
-        </div>
-      </article>
-
-      <!-- ─── JERSEY: Harambee Stars ─── -->
-      <article class="product-card product-card--jersey" data-id="j5" data-name="Kenya Harambee Stars Jersey" data-price="2200" data-category="jersey">
-        <div class="product-media product-media--jersey">
-          <div class="product-img-wrap img-skeleton" style="--aspect: 3/4;">
-            <picture>
-              <source srcset="assets/jerseys/harambee-stars.webp" type="image/webp" />
-              <img src="assets/jerseys/harambee-stars.jpg" alt="Kenya Harambee Stars Jersey — national team colours with embroidered crest"
-                   width="300" height="400" loading="lazy" class="product-img"
-                   onerror="this.closest('.product-img-wrap').classList.add('img-fallback')" />
-            </picture>
-          </div>
-          <div class="jersey-club">Harambee Stars</div>
-          <div class="product-badge">LOCAL PRIDE</div>
-        </div>
-        <div class="product-info">
-          <h2 class="product-name">Kenya Harambee Stars Jersey</h2>
-          <p class="product-detail">National team colors · Breathable mesh · Embroidered crest</p>
-          <div class="product-price">Ksh 2,200</div>
-          <div class="size-selector">
-            <span class="size-label">Size:</span>
-            <div class="sizes">
-              <button class="size-btn" data-size="S">S</button>
-              <button class="size-btn" data-size="M">M</button>
-              <button class="size-btn" data-size="L">L</button>
-              <button class="size-btn" data-size="XL">XL</button>
-            </div>
-          </div>
-          <div class="jersey-custom-fields">
-            <div class="custom-field-group">
-              <label class="custom-field-label">Custom Name (optional)</label>
-              <input type="text" class="custom-name-input" placeholder="Your name" maxlength="20" />
-            </div>
-            <div class="custom-field-group">
-              <label class="custom-field-label">Custom Number (optional)</label>
-              <input type="text" class="custom-number-input" placeholder="Your number" maxlength="3" />
-            </div>
-          </div>
-          <button class="add-to-cart-btn add-to-cart-btn--jersey">+ Add to Kit Bag</button>
-        </div>
-      </article>
-
-      <!-- ─── JERSEY: Custom Club ─── -->
-      <article class="product-card product-card--jersey" data-id="j6" data-name="Custom Club Jersey" data-price="3000" data-category="jersey">
-        <div class="product-media product-media--jersey">
-          <div class="product-img-wrap img-skeleton" style="--aspect: 3/4;">
-            <picture>
-              <source srcset="assets/jerseys/custom-club.webp" type="image/webp" />
-              <img src="assets/jerseys/custom-club.jpg" alt="Custom Club Jersey — full custom print with your colours and logo"
-                   width="300" height="400" loading="lazy" class="product-img"
-                   onerror="this.closest('.product-img-wrap').classList.add('img-fallback')" />
-            </picture>
-          </div>
-          <div class="jersey-club">Your Club</div>
-          <div class="product-badge product-badge--new">BESPOKE</div>
-        </div>
-        <div class="product-info">
-          <h2 class="product-name">Custom Club Jersey</h2>
-          <p class="product-detail">Full custom print · Your colours · Logo + name + number</p>
-          <div class="product-price">Ksh 3,000</div>
-          <div class="size-selector">
-            <span class="size-label">Size:</span>
-            <div class="sizes">
-              <button class="size-btn" data-size="S">S</button>
-              <button class="size-btn" data-size="M">M</button>
-              <button class="size-btn" data-size="L">L</button>
-              <button class="size-btn" data-size="XL">XL</button>
-            </div>
-          </div>
-          <div class="jersey-custom-fields">
-            <div class="custom-field-group">
-              <label class="custom-field-label">Custom Name (optional)</label>
-              <input type="text" class="custom-name-input" placeholder="Your name" maxlength="20" />
-            </div>
-            <div class="custom-field-group">
-              <label class="custom-field-label">Custom Number (optional)</label>
-              <input type="text" class="custom-number-input" placeholder="Your number" maxlength="3" />
-            </div>
-          </div>
-          <button class="add-to-cart-btn add-to-cart-btn--jersey">+ Add to Kit Bag</button>
-        </div>
-      </article>
-
-    </div><!-- /#jerseysGrid -->
-  </div><!-- /.shelf -->
+  </main>
 
 
-  <!-- ═══════════════════════════════════════════
+  <!-- ══════════════════════════════════
        FOOTER
-  ═══════════════════════════════════════════ -->
+  ══════════════════════════════════ -->
   <footer class="footer">
-    <div class="footer-inner">
-      <div class="footer-logo">
-        <span class="logo-qs">BSC</span>
-        <div class="logo-text-sm">
-          <span class="logo-main">BAARI SPORTS CENTER</span>
-          <span class="logo-sub">Digital Shelves · Kimana Town</span>
-        </div>
+    <div class="footer__inner">
+      <div class="footer__brand">
+        <span class="nav__logo-mark">BSC</span>
+        <span class="nav__logo-text">
+          <span class="nav__logo-name">BAARI SPORTS CENTER</span>
+          <span class="nav__logo-loc">Digital Shelves · Kimana Town</span>
+        </span>
       </div>
-      <p class="footer-copy">© 2025 Baari Sports Center. Architected by <strong>Flynn Technologies</strong></p>
+      <p class="footer__copy">© 2025 Baari Sports Center · Architected by <strong>Flynn Technologies</strong></p>
     </div>
   </footer>
 
 
-  <!-- ═══════════════════════════════════════════
+  <!-- ══════════════════════════════════
        CART DRAWER
-  ═══════════════════════════════════════════ -->
+  ══════════════════════════════════ -->
   <div class="cart-overlay" id="cartOverlay" aria-hidden="true"></div>
 
   <aside class="cart-drawer" id="cartDrawer" aria-hidden="true" aria-label="Kit Bag">
-    <div class="cart-drawer-header">
-      <h2 class="cart-drawer-title">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
-          <line x1="3" y1="6" x2="21" y2="6"/>
-          <path d="M16 10a4 4 0 01-8 0"/>
-        </svg>
+    <div class="cart-drawer__head">
+      <div class="cart-drawer__title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
         Kit Bag
-        <span class="cart-item-count" id="cartItemCount">0 items</span>
-      </h2>
-      <button class="cart-close-btn" id="cartCloseBtn" aria-label="Close kit bag">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <line x1="18" y1="6" x2="6" y2="18"/>
-          <line x1="6" y1="6" x2="18" y2="18"/>
-        </svg>
+      </div>
+      <span class="cart-drawer__count" id="cartItemCount">0 items</span>
+      <button class="cart-drawer__close" id="cartClose" aria-label="Close kit bag">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
 
-    <div class="cart-body" id="cartBody">
+    <div class="cart-drawer__body" id="cartBody">
       <div class="cart-empty" id="cartEmpty">
-        <div class="cart-empty-icon" aria-hidden="true">⚽</div>
-        <p>Your kit bag is empty.</p>
-        <p class="cart-empty-sub">Browse the Jersey Locker and add kits to get started.</p>
+        <div class="cart-empty__icon" aria-hidden="true">🛒</div>
+        <p class="cart-empty__msg">Your kit bag is empty.</p>
+        <p class="cart-empty__sub">Browse categories and add items to get started.</p>
       </div>
-      <ul class="cart-items-list" id="cartItemsList" aria-label="Items in your kit bag"></ul>
+      <ul class="cart-list" id="cartList" aria-label="Cart items"></ul>
     </div>
 
-    <div class="cart-footer" id="cartFooter">
+    <div class="cart-drawer__foot" id="cartFoot">
       <div class="cart-subtotal">
-        <span>Subtotal</span>
-        <span class="cart-subtotal-amount" id="cartSubtotal">Ksh 0</span>
+        <span class="cart-subtotal__label">Subtotal</span>
+        <span class="cart-subtotal__amount" id="cartSubtotal">Ksh 0</span>
       </div>
-      <p class="cart-delivery-note">🚚 Delivery fee confirmed on WhatsApp</p>
+      <p class="cart-delivery-note">🚚 Delivery confirmed via WhatsApp</p>
       <button class="checkout-btn" id="checkoutBtn" disabled>
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-        </svg>
-        💬 Complete Order on WhatsApp
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Complete on WhatsApp
       </button>
     </div>
   </aside>
 
 
-  <!-- ═══════════════════════════════════════════
+  <!-- ══════════════════════════════════
        WHATSAPP FAB
-  ═══════════════════════════════════════════ -->
-  <a href="https://wa.me/254702453813"
-     class="wa-fab"
-     id="waFab"
-     target="_blank"
-     rel="noopener noreferrer"
-     aria-label="Chat with us on WhatsApp">
-    <svg class="wa-fab-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-    </svg>
-    <span class="wa-fab-label">Chat</span>
+  ══════════════════════════════════ -->
+  <a class="wa-fab" href="https://wa.me/254702453813" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    <span>Chat</span>
   </a>
 
-
-  <!-- ═══════════════════════════════════════════
-       MOBILE FLOATING CART
-  ═══════════════════════════════════════════ -->
-  <button class="mobile-float-cart" id="mobileFloatCart" aria-label="Open kit bag">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
-      <line x1="3" y1="6" x2="21" y2="6"/>
-      <path d="M16 10a4 4 0 01-8 0"/>
-    </svg>
-    <span class="mobile-float-badge" id="mobileFloatBadge">0</span>
+  <!-- Mobile floating cart -->
+  <button class="mob-cart" id="mobCart" aria-label="Open kit bag">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+    <span class="mob-cart__badge" id="mobCartBadge">0</span>
   </button>
 
   <!-- Toast -->

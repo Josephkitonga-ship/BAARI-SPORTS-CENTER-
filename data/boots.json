@@ -4,5 +4,17 @@
     "name": "Baari Football Boot #001",
     "price": "Ksh 12,500",
     "img": "images/boots/boots-001.jpg"
+  },
+  {
+    "id": "boo-002",
+    "name": "Baari Football Boot #002",
+    "price": "Ksh 12,500",
+    "img": "images/boots/boots-002.jpg"
+  },
+  {
+    "id": "boo-003",
+    "name": "Baari Football Boot #003",
+    "price": "Ksh 12,500",
+    "img": "images/boots/boots-003.jpg"
   }
 ]

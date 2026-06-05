@@ -4,45 +4,51 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BAARI SPORTS CENTER — Digital Shelves · Kimana</title>
+
+  <!-- ── Google Fonts: Syne · DM Sans · DM Mono ── -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;0,900;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
+
   <!-- ═══════════════════════════════════════════
-       NAVIGATION BAR
+       NAVIGATION
   ═══════════════════════════════════════════ -->
-  <header class="nav-header" id="navHeader">
-    <div class="nav-inner">
+  <header class="nav" id="nav">
+    <div class="nav__inner">
 
       <!-- Logo -->
-      <a class="nav-logo" href="index.html" aria-label="Baari Sports Center — Home">
-        <span class="logo-qs">BSC</span>
-        <div class="logo-text">
-          <span class="logo-main">BAARI SPORTS CENTER</span>
-          <span class="logo-sub">Digital Shelves · Kimana</span>
+      <a class="nav__logo" href="index.html" aria-label="Baari Sports Center — Home">
+        <div class="nav__logo-mark">BSC</div>
+        <div class="nav__logo-text">
+          <span class="nav__logo-name">BAARI SPORTS CENTER</span>
+          <span class="nav__logo-loc">Digital Shelves · Kimana</span>
         </div>
       </a>
 
-      <!-- Desktop nav links -->
-      <nav class="nav-links" aria-label="Primary navigation">
-        <a class="nav-link" href="index.html" data-page="index.html">Our Story</a>
-        <a class="nav-link" href="catalogue.html" data-page="catalogue.html">Shop Catalogue</a>
+      <!-- Desktop links -->
+      <nav class="nav__links" aria-label="Primary navigation">
+        <a class="nav__link nav__link--active" href="index.html">Our Story</a>
+        <a class="nav__link" href="catalogue.html">Shop Catalogue</a>
       </nav>
 
       <!-- Actions -->
-      <div class="nav-actions">
-        <button class="cart-trigger" id="cartTrigger" aria-label="Open kit bag">
-          <svg class="cart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <div class="nav__actions">
+        <button class="nav__cart-btn" id="cartTrigger" aria-label="Open kit bag">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
             <line x1="3" y1="6" x2="21" y2="6"/>
             <path d="M16 10a4 4 0 01-8 0"/>
           </svg>
-          <span class="cart-badge" id="cartBadge">0</span>
+          <span class="nav__cart-count" id="cartBadge">0</span>
         </button>
-        <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+
+        <button class="nav__hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
           <span></span><span></span><span></span>
         </button>
       </div>
@@ -51,155 +57,153 @@
   </header>
 
   <!-- Mobile nav overlay -->
-  <div class="mobile-nav-overlay" id="mobileNavOverlay" role="dialog" aria-modal="true" aria-label="Mobile navigation">
-    <button class="mobile-nav-close" id="mobileNavClose" aria-label="Close menu">✕</button>
-    <a class="mobile-nav-link" href="index.html" data-page="index.html">Our Story</a>
-    <a class="mobile-nav-link" href="catalogue.html" data-page="catalogue.html">Shop Catalogue</a>
+  <div class="mobile-nav" id="mobileNav" role="dialog" aria-modal="true" aria-label="Mobile navigation">
+    <button class="mobile-nav__close" id="mobileNavClose" aria-label="Close menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+    <a class="mobile-nav__link mobile-nav__link--active" href="index.html">Our Story</a>
+    <a class="mobile-nav__link" href="catalogue.html">Shop Catalogue</a>
   </div>
 
 
   <!-- ═══════════════════════════════════════════
-       LANDING PAGE
+       PAGE HERO — EDITORIAL
   ═══════════════════════════════════════════ -->
+  <section class="page-hero" id="hero">
+    <div class="page-hero__inner">
 
-  <!-- ─── HERO ─── -->
-  <section class="hero" id="hero">
-
-    <!-- Decorative background geometry -->
-    <div class="hero-bg" aria-hidden="true">
-      <div class="hero-grid-overlay"></div>
-      <div class="hero-orb hero-orb--1"></div>
-      <div class="hero-orb hero-orb--2"></div>
-      <div class="hero-orb hero-orb--3"></div>
-    </div>
-
-    <!-- Deep vignette focus layer -->
-    <div class="hero-vignette" aria-hidden="true"></div>
-
-    <div class="hero-content">
-
-      <!-- Eyebrow — first element in -->
-      <div class="hero-eyebrow reveal-target reveal-target--d1">
-        <span class="eyebrow-dot" aria-hidden="true"></span>
-        <span>Kimana Town · Ships Fast · Pay via M-Pesa</span>
+      <!-- Eyebrow label -->
+      <div class="page-hero__label">
+        <span class="pulse-dot" aria-hidden="true"></span>
+        <span>Kimana Town · M-Pesa Ready · Ships Fast</span>
       </div>
 
-      <!-- Headline — three lines, each staggered -->
-      <h1 class="hero-headline" aria-label="Stadium Grade Kits">
-        <span class="hl-line hl-line--1 reveal-target reveal-target--d2">STADIUM</span>
-        <span class="hl-line hl-line--2 reveal-target reveal-target--d3">GRADE</span>
-        <span class="hl-line hl-line--3 reveal-target reveal-target--d4">KITS<span class="hl-accent">.</span></span>
+      <!-- Headline -->
+      <h1 class="page-hero__title" aria-label="Stadium Grade Kits">
+        <span class="page-hero__title-line">STADIUM</span>
+        <span class="page-hero__title-line">GRADE</span>
+        <span class="page-hero__title-line page-hero__title-line--accent">KITS.</span>
       </h1>
 
-      <!-- Subtitle -->
-      <p class="hero-sub reveal-target reveal-target--d5">
-        Custom jerseys. Elite match day kits. Official-grade training gear.<br />
+      <!-- Descriptor -->
+      <p class="page-hero__desc">
+        Custom jerseys. Elite match-day kits. Official-grade training gear.<br />
         Add to cart — checkout on WhatsApp in seconds.
       </p>
 
-      <!-- CTAs -->
-      <div class="hero-ctas reveal-target reveal-target--d6">
-        <a class="btn btn--primary" href="catalogue.html">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          Shop the Jersey Locker
-        </a>
-        <button class="btn btn--ghost" id="heroHowItWorks">
-          How It Works ⚽
-        </button>
-      </div>
-
-      <!-- Stats -->
-      <div class="hero-stats reveal-target reveal-target--d7">
-        <div class="stat">
-          <span class="stat-num">50+</span>
-          <span class="stat-label">Clubs</span>
-        </div>
-        <div class="stat-divider" aria-hidden="true"></div>
-        <div class="stat">
-          <span class="stat-num">48hr</span>
-          <span class="stat-label">Print &amp; Ship</span>
-        </div>
-        <div class="stat-divider" aria-hidden="true"></div>
-        <div class="stat">
-          <span class="stat-num">M-Pesa</span>
-          <span class="stat-label">Accepted</span>
-        </div>
-      </div>
-
     </div>
 
-    <!-- Hero visual card stack -->
-    <div class="hero-visual reveal-target reveal-target--d4" aria-hidden="true">
-      <div class="hero-card-stack">
-        <div class="hc hc--1">
-          <div class="hc-tag">CUSTOM KIT</div>
-          <div class="hc-img-wrap hc-img-wrap--sm img-skeleton">
-            <img src="assets/hero-kit.jpg" alt="" width="80" height="80" loading="lazy" class="hc-img"
-                 onerror="this.closest('.hc-img-wrap').classList.add('img-fallback')" />
-          </div>
-          <div class="hc-name">Match Day Kit</div>
-          <div class="hc-price">Ksh 2,800</div>
-        </div>
-        <div class="hc hc--2">
-          <div class="hc-tag">BESTSELLER</div>
-          <div class="hc-img-wrap hc-img-wrap--sm img-skeleton">
-            <img src="assets/hero-jersey.jpg" alt="" width="80" height="80" loading="lazy" class="hc-img"
-                 onerror="this.closest('.hc-img-wrap').classList.add('img-fallback')" />
-          </div>
-          <div class="hc-name">Custom Jersey</div>
-          <div class="hc-price">Ksh 2,500</div>
-        </div>
-        <div class="hc hc--3">
-          <div class="hc-tag">TRAINING</div>
-          <div class="hc-img-wrap hc-img-wrap--sm img-skeleton">
-            <img src="assets/hero-training.jpg" alt="" width="80" height="80" loading="lazy" class="hc-img"
-                 onerror="this.closest('.hc-img-wrap').classList.add('img-fallback')" />
-          </div>
-          <div class="hc-name">Training Gear</div>
-          <div class="hc-price">Ksh 1,800</div>
-        </div>
-        <div class="hc-accent-ring"></div>
-      </div>
-    </div>
-
-    <!-- Scroll cue -->
-    <button class="hero-scroll-cue" id="heroScrollCue" aria-label="Scroll to about section">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
-    </button>
-
+    <span class="page-hero__scroll-hint" aria-hidden="true">Scroll to explore</span>
   </section>
 
 
-  <!-- ─── ABOUT / VALUE PROPOSITIONS ─── -->
-  <section class="about-strip" id="about">
-    <div class="about-inner">
-      <div class="about-block">
-        <span class="about-icon">📍</span>
-        <h4>Kimana Town</h4>
-        <p>Rooted in Oloitokitok Sub-County, delivering across Kajiado County and beyond.</p>
-      </div>
-      <div class="about-block">
-        <span class="about-icon">💬</span>
-        <h4>WhatsApp Checkout</h4>
-        <p>Zero friction. Your cart compiles into a clean WhatsApp message. Done in one tap.</p>
-      </div>
-      <div class="about-block">
-        <span class="about-icon">📱</span>
-        <h4>M-Pesa Payments</h4>
-        <p>Pay via M-Pesa, cash on delivery, or arrange with our team directly via WhatsApp.</p>
-      </div>
-      <div class="about-block">
-        <span class="about-icon">🚚</span>
-        <h4>Fast Delivery</h4>
-        <p>Same-day delivery within Kimana. 24hr dispatch to wider Kajiado region.</p>
-      </div>
+  <!-- ═══════════════════════════════════════════
+       CORE VALUES — 4-CARD GRID
+  ═══════════════════════════════════════════ -->
+  <section class="catalogue" id="about" aria-labelledby="valuesHeading">
+
+    <div class="catalogue__status">
+      <p class="catalogue__status-text" id="valuesHeading">Our Promise · 4 Pillars</p>
     </div>
 
-    <div class="about-cta-row">
-      <a class="btn btn--primary" href="catalogue.html">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        Browse Jersey Locker
-      </a>
+    <div class="product-grid" role="list">
+
+      <!-- Card 1 — Kimana Town -->
+      <article class="product-card product-card--visible" role="listitem">
+        <div class="product-card__media" aria-hidden="true">
+          <div class="product-card__img-wrap img-error">
+            <div class="product-card__img-fallback">📍</div>
+          </div>
+        </div>
+        <div class="product-card__info">
+          <h2 class="product-card__name">Kimana Town</h2>
+          <div class="product-card__price">Local</div>
+          <p style="font-size:13px;color:var(--ink-50);line-height:1.65;margin-top:4px;">
+            Rooted in Oloitokitok Sub-County, delivering across Kajiado County and beyond.
+          </p>
+          <div class="product-card__actions" style="margin-top:auto;padding-top:14px;">
+            <a class="product-card__buy" href="catalogue.html" style="text-decoration:none;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                   width="14" height="14" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              Shop Now
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 2 — WhatsApp Checkout -->
+      <article class="product-card product-card--visible" role="listitem" style="animation-delay:0.08s">
+        <div class="product-card__media" aria-hidden="true">
+          <div class="product-card__img-wrap img-error">
+            <div class="product-card__img-fallback">💬</div>
+          </div>
+        </div>
+        <div class="product-card__info">
+          <h2 class="product-card__name">WhatsApp Checkout</h2>
+          <div class="product-card__price">Zero Friction</div>
+          <p style="font-size:13px;color:var(--ink-50);line-height:1.65;margin-top:4px;">
+            Your cart compiles into a clean WhatsApp message. Confirm your order in one tap.
+          </p>
+          <div class="product-card__actions" style="margin-top:auto;padding-top:14px;">
+            <a class="product-card__buy" href="https://wa.me/254702453813" target="_blank"
+               rel="noopener noreferrer" style="text-decoration:none;">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14" aria-hidden="true">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+              </svg>
+              Chat Us
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 3 — M-Pesa -->
+      <article class="product-card product-card--visible" role="listitem" style="animation-delay:0.16s">
+        <div class="product-card__media" aria-hidden="true">
+          <div class="product-card__img-wrap img-error">
+            <div class="product-card__img-fallback">📱</div>
+          </div>
+        </div>
+        <div class="product-card__info">
+          <h2 class="product-card__name">M-Pesa Built-in</h2>
+          <div class="product-card__price">Accepted</div>
+          <p style="font-size:13px;color:var(--ink-50);line-height:1.65;margin-top:4px;">
+            Pay via M-Pesa, cash on delivery, or arrange directly with our team on WhatsApp.
+          </p>
+          <div class="product-card__actions" style="margin-top:auto;padding-top:14px;">
+            <a class="product-card__buy" href="catalogue.html" style="text-decoration:none;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                   width="14" height="14" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              Start Order
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 4 — Fast Delivery -->
+      <article class="product-card product-card--visible" role="listitem" style="animation-delay:0.24s">
+        <div class="product-card__media" aria-hidden="true">
+          <div class="product-card__img-wrap img-error">
+            <div class="product-card__img-fallback">🚚</div>
+          </div>
+        </div>
+        <div class="product-card__info">
+          <h2 class="product-card__name">Fast Delivery</h2>
+          <div class="product-card__price">48hr</div>
+          <p style="font-size:13px;color:var(--ink-50);line-height:1.65;margin-top:4px;">
+            Same-day delivery within Kimana. 24-hour dispatch to the wider Kajiado region.
+          </p>
+          <div class="product-card__actions" style="margin-top:auto;padding-top:14px;">
+            <a class="product-card__buy" href="catalogue.html" style="text-decoration:none;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                   width="14" height="14" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              Browse Kits
+            </a>
+          </div>
+        </div>
+      </article>
+
     </div>
   </section>
 
@@ -208,15 +212,17 @@
        FOOTER
   ═══════════════════════════════════════════ -->
   <footer class="footer">
-    <div class="footer-inner">
-      <div class="footer-logo">
-        <span class="logo-qs">BSC</span>
-        <div class="logo-text-sm">
-          <span class="logo-main">BAARI SPORTS CENTER</span>
-          <span class="logo-sub">Digital Shelves · Kimana Town</span>
+    <div class="footer__inner">
+      <div class="footer__brand">
+        <div class="nav__logo-mark" aria-hidden="true">BSC</div>
+        <div class="nav__logo-text">
+          <span class="nav__logo-name">BAARI SPORTS CENTER</span>
+          <span class="nav__logo-loc">Digital Shelves · Kimana Town</span>
         </div>
       </div>
-      <p class="footer-copy">© 2025 Baari Sports Center. Architected by <strong>Flynn Technologies</strong></p>
+      <p class="footer__copy">
+        © 2025 Baari Sports Center. Architected by <strong>Flynn Technologies</strong>
+      </p>
     </div>
   </footer>
 
@@ -227,37 +233,43 @@
   <div class="cart-overlay" id="cartOverlay" aria-hidden="true"></div>
 
   <aside class="cart-drawer" id="cartDrawer" aria-hidden="true" aria-label="Kit Bag">
-    <div class="cart-drawer-header">
-      <h2 class="cart-drawer-title">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+
+    <!-- Drawer header -->
+    <div class="cart-drawer__head">
+      <h2 class="cart-drawer__title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+             aria-hidden="true">
           <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
           <line x1="3" y1="6" x2="21" y2="6"/>
           <path d="M16 10a4 4 0 01-8 0"/>
         </svg>
         Kit Bag
-        <span class="cart-item-count" id="cartItemCount">0 items</span>
+        <span class="cart-drawer__count" id="cartItemCount">0 items</span>
       </h2>
-      <button class="cart-close-btn" id="cartCloseBtn" aria-label="Close kit bag">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <button class="cart-drawer__close" id="cartClose" aria-label="Close kit bag">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             aria-hidden="true">
           <line x1="18" y1="6" x2="6" y2="18"/>
           <line x1="6" y1="6" x2="18" y2="18"/>
         </svg>
       </button>
     </div>
 
-    <div class="cart-body" id="cartBody">
+    <!-- Drawer body -->
+    <div class="cart-drawer__body" id="cartBody">
       <div class="cart-empty" id="cartEmpty">
-        <div class="cart-empty-icon" aria-hidden="true">⚽</div>
-        <p>Your kit bag is empty.</p>
-        <p class="cart-empty-sub">Browse the Jersey Locker and add kits to get started.</p>
+        <div class="cart-empty__icon" aria-hidden="true">⚽</div>
+        <p class="cart-empty__msg">Your kit bag is empty.</p>
+        <p class="cart-empty__sub">Browse the Jersey Locker and add kits to get started.</p>
       </div>
-      <ul class="cart-items-list" id="cartItemsList" aria-label="Items in your kit bag"></ul>
+      <ul class="cart-list" id="cartList" aria-label="Items in your kit bag"></ul>
     </div>
 
-    <div class="cart-footer" id="cartFooter">
+    <!-- Drawer footer -->
+    <div class="cart-drawer__foot">
       <div class="cart-subtotal">
-        <span>Subtotal</span>
-        <span class="cart-subtotal-amount" id="cartSubtotal">Ksh 0</span>
+        <span class="cart-subtotal__label">Subtotal</span>
+        <span class="cart-subtotal__amount" id="cartSubtotal">Ksh 0</span>
       </div>
       <p class="cart-delivery-note">🚚 Delivery fee confirmed on WhatsApp</p>
       <button class="checkout-btn" id="checkoutBtn" disabled>
@@ -267,6 +279,7 @@
         💬 Complete Order on WhatsApp
       </button>
     </div>
+
   </aside>
 
 
@@ -279,27 +292,30 @@
      target="_blank"
      rel="noopener noreferrer"
      aria-label="Chat with us on WhatsApp">
-    <svg class="wa-fab-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
     </svg>
-    <span class="wa-fab-label">Chat</span>
+    <span>Chat</span>
   </a>
 
 
   <!-- ═══════════════════════════════════════════
        MOBILE FLOATING CART
   ═══════════════════════════════════════════ -->
-  <button class="mobile-float-cart" id="mobileFloatCart" aria-label="Open kit bag">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  <button class="mob-cart" id="mobCart" aria-label="Open kit bag">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
       <line x1="3" y1="6" x2="21" y2="6"/>
       <path d="M16 10a4 4 0 01-8 0"/>
     </svg>
-    <span class="mobile-float-badge" id="mobileFloatBadge">0</span>
+    <span class="mob-cart__badge" id="mobCartBadge">0</span>
   </button>
+
 
   <!-- Toast -->
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
 
   <script src="script.js"></script>
 </body>

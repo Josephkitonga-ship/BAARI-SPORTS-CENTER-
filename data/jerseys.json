@@ -52,5 +52,47 @@
     "name": "Baari Club Jersey #009",
     "price": "Ksh 2,500",
     "img": "images/jerseys/jerseys-009.jpg"
+  },
+  {
+    "id": "jer-010",
+    "name": "Baari Club Jersey #010",
+    "price": "Ksh 2,500",
+    "img": "images/jerseys/jerseys-010.jpg"
+  },
+  {
+    "id": "jer-011",
+    "name": "Baari Club Jersey #011",
+    "price": "Ksh 2,500",
+    "img": "images/jerseys/jerseys-011.jpg"
+  },
+  {
+    "id": "jer-012",
+    "name": "Baari Club Jersey #012",
+    "price": "Ksh 2,500",
+    "img": "images/jerseys/jerseys-012.jpg"
+  },
+  {
+    "id": "jer-013",
+    "name": "Baari Club Jersey #013",
+    "price": "Ksh 2,500",
+    "img": "images/jerseys/jerseys-013.jpg"
+  },
+  {
+    "id": "jer-014",
+    "name": "Baari Club Jersey #014",
+    "price": "Ksh 2,500",
+    "img": "images/jerseys/jerseys-014.jpg"
+  },
+  {
+    "id": "jer-015",
+    "name": "Baari Club Jersey #015",
+    "price": "Ksh 2,500",
+    "img": "images/jerseys/jerseys-015.jpg"
+  },
+  {
+    "id": "jer-016",
+    "name": "Baari Club Jersey #016",
+    "price": "Ksh 2,500",
+    "img": "images/jerseys/jerseys-016.jpg"
   }
 ]
