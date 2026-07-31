@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5.0">
+  <title>Baari Sports Center | Athletic Gear, Jerseys & Custom Kits</title>
+  <meta name="description" content="Baari Sports Center — Kimana Town's premier destination for athletic gear, jerseys, boots and custom team kits. Shop live inventory, order via WhatsApp, pay with M-Pesa.">
+  <meta name="theme-color" content="#0A0A0A">
+
+  <!-- Preconnects -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+
+  <!-- ============================= -->
+  <!-- SKIP LINK (ACCESSIBILITY)     -->
+  <!-- ============================= -->
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <!-- ============================= -->
+  <!-- STICKY HEADER                 -->
+  <!-- ============================= -->
+  <header class="site-header" id="siteHeader">
+    <div class="header-inner">
+      <button class="icon-btn menu-trigger" id="menuTrigger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileDrawer">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+
+      <a href="#home" class="brand-logo" data-scroll>
+        <span class="brand-mark">BAARI</span><span class="brand-sub">SPORTS CENTER</span>
+      </a>
+
+      <div class="header-actions">
+        <button class="icon-btn" id="searchTrigger" aria-label="Search products" aria-expanded="false" aria-controls="searchOverlay">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="11" cy="11" r="7"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </button>
+        <button class="icon-btn cart-trigger" id="cartTrigger" aria-label="Open cart" aria-expanded="false" aria-controls="cartDrawer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+          </svg>
+          <span class="cart-badge" id="cartBadge" hidden>0</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Sub-nav: category scroll-spy -->
+    <nav class="sub-nav" id="subNav" aria-label="Product categories">
+      <div class="sub-nav-track" id="subNavTrack">
+        <button class="sub-nav-item is-active" data-category="all">All</button>
+        <button class="sub-nav-item" data-category="jerseys">Jerseys</button>
+        <button class="sub-nav-item" data-category="boots">Boots</button>
+        <button class="sub-nav-item" data-category="training">Training</button>
+        <button class="sub-nav-item" data-category="accessories">Accessories</button>
+        <button class="sub-nav-item" data-category="team-kits">Team Kits</button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ============================= -->
+  <!-- SEARCH OVERLAY                -->
+  <!-- ============================= -->
+  <div class="search-overlay" id="searchOverlay" hidden>
+    <div class="search-overlay-inner">
+      <div class="search-input-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="search" id="searchInput" placeholder="Search jerseys, boots, gear..." autocomplete="off" aria-label="Search products">
+        <button class="icon-btn" id="searchClose" aria-label="Close search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="search-results" id="searchResults"></div>
+    </div>
+  </div>
+
+  <!-- ============================= -->
+  <!-- MOBILE DRAWER NAV              -->
+  <!-- ============================= -->
+  <div class="drawer-scrim" id="drawerScrim" hidden></div>
+  <aside class="mobile-drawer" id="mobileDrawer" aria-label="Main navigation" aria-hidden="true">
+    <div class="drawer-header">
+      <span class="brand-mark">BAARI</span>
+      <button class="icon-btn" id="drawerClose" aria-label="Close menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+    <nav class="drawer-nav">
+      <a href="#home" data-scroll>Home</a>
+      <a href="#showroom" data-scroll>Showroom</a>
+      <a href="#custom-kits" data-scroll>Custom Team Kits</a>
+      <a href="#about" data-scroll>About Us</a>
+      <a href="#contact" data-scroll>Contact</a>
+    </nav>
+    <div class="drawer-footer">
+      <a href="https://wa.me/254700000000" class="btn btn-accent btn-block" target="_blank" rel="noopener">
+        Chat on WhatsApp
+      </a>
+    </div>
+  </aside>
+
+  <!-- ============================= -->
+  <!-- MAIN CONTENT                   -->
+  <!-- ============================= -->
+  <main id="main-content">
+
+    <!-- HERO -->
+    <section class="hero" id="home">
+      <div class="hero-content">
+        <p class="eyebrow">Kimana Town &middot; Est. Local Sports HQ</p>
+        <h1 class="hero-title">Gear Up.<br>Play <span class="text-accent">Elite.</span></h1>
+        <p class="hero-copy">Authentic jerseys, pro boots &amp; training equipment. Fast WhatsApp ordering, M-Pesa checkout, real stock — always.</p>
+        <div class="hero-actions">
+          <a href="#showroom" class="btn btn-accent" data-scroll>Shop Showroom</a>
+          <a href="#custom-kits" class="btn btn-ghost" data-scroll>Custom Team Kits</a>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-num">500+</span><span class="stat-label">Products</span></div>
+        <div class="stat"><span class="stat-num">1.2k</span><span class="stat-label">Happy Clients</span></div>
+        <div class="stat"><span class="stat-num">24h</span><span class="stat-label">Dispatch</span></div>
+      </div>
+    </section>
+
+    <!-- LIVE INVENTORY STRIP -->
+    <section class="live-strip" aria-label="Live stock alerts">
+      <div class="live-strip-track" id="liveStripTrack">
+        <span class="live-dot" aria-hidden="true"></span>
+        <span id="liveStripText">Connecting to live inventory&hellip;</span>
+      </div>
+    </section>
+
+    <!-- SHOWROOM: PRODUCT GRID -->
+    <section class="showroom" id="showroom">
+      <div class="section-head">
+        <h2 class="section-title">Showroom</h2>
+        <p class="section-sub">Live stock, updated in real time</p>
+      </div>
+
+      <div class="filter-chips" id="filterChips">
+        <button class="chip is-active" data-filter="all">All</button>
+        <button class="chip" data-filter="in-stock">In Stock</button>
+        <button class="chip" data-filter="new">New Arrivals</button>
+        <button class="chip" data-filter="sale">On Sale</button>
+      </div>
+
+      <div class="product-grid" id="productGrid" aria-live="polite">
+        <!-- Skeleton loaders injected by app.js on load; real cards render here -->
+        <div class="product-card skeleton" aria-hidden="true">
+          <div class="skeleton-img"></div>
+          <div class="skeleton-line short"></div>
+          <div class="skeleton-line"></div>
+        </div>
+        <div class="product-card skeleton" aria-hidden="true">
+          <div class="skeleton-img"></div>
+          <div class="skeleton-line short"></div>
+          <div class="skeleton-line"></div>
+        </div>
+        <div class="product-card skeleton" aria-hidden="true">
+          <div class="skeleton-img"></div>
+          <div class="skeleton-line short"></div>
+          <div class="skeleton-line"></div>
+        </div>
+        <div class="product-card skeleton" aria-hidden="true">
+          <div class="skeleton-img"></div>
+          <div class="skeleton-line short"></div>
+          <div class="skeleton-line"></div>
+        </div>
+      </div>
+
+      <button class="btn btn-outline btn-block load-more" id="loadMoreBtn" hidden>Load More</button>
+    </section>
+
+    <!-- CUSTOM TEAM KITS (FaaS Pathway B) -->
+    <section class="custom-kits" id="custom-kits">
+      <div class="section-head">
+        <h2 class="section-title">Custom Team Kits</h2>
+        <p class="section-sub">Bulk pricing &amp; printing, calculated instantly</p>
+      </div>
+
+      <form class="kit-calculator" id="kitCalculatorForm" novalidate>
+        <div class="form-row">
+          <label for="kitGarment">Garment Type</label>
+          <select id="kitGarment" name="garment" required>
+            <option value="jersey">Match Jersey</option>
+            <option value="training-tee">Training Tee</option>
+            <option value="tracksuit">Tracksuit Set</option>
+            <option value="shorts">Shorts</option>
+          </select>
+        </div>
+
+        <div class="form-row form-row-split">
+          <div>
+            <label for="kitQty">Quantity</label>
+            <input type="number" id="kitQty" name="quantity" min="5" max="500" value="15" required>
+          </div>
+          <div>
+            <label for="kitPrinting">Printing</label>
+            <select id="kitPrinting" name="printing">
+              <option value="none">None</option>
+              <option value="name-number">Name + Number</option>
+              <option value="full-sponsor">Full Sponsor Set</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label for="kitNotes">Notes (colors, badge, deadline)</label>
+          <textarea id="kitNotes" name="notes" rows="3" placeholder="e.g. Home kit, navy + gold, club badge on chest, needed by 20th Aug"></textarea>
+        </div>
+
+        <div class="kit-price-preview" id="kitPricePreview" aria-live="polite">
+          <span class="kit-price-label">Estimated Total</span>
+          <span class="kit-price-value" id="kitPriceValue">KES &mdash;</span>
+        </div>
+
+        <button type="submit" class="btn btn-accent btn-block" id="kitSubmitBtn">
+          <span class="btn-label">Get Instant Quote</span>
+          <span class="btn-spinner" hidden></span>
+        </button>
+      </form>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="about" id="about">
+      <div class="section-head">
+        <h2 class="section-title">About Baari</h2>
+      </div>
+      <p class="about-copy">
+        Baari Sports Center is Kimana Town's trusted stop for athletic gear — from match-day jerseys
+        to boots, training kit, and full custom team orders. We stock authentic products, verify
+        every size in person, and move orders fast through WhatsApp and M-Pesa. No guesswork, no delays.
+      </p>
+    </section>
+
+  </main>
+
+  <!-- ============================= -->
+  <!-- CART DRAWER                    -->
+  <!-- ============================= -->
+  <div class="drawer-scrim" id="cartScrim" hidden></div>
+  <aside class="cart-drawer" id="cartDrawer" aria-label="Shopping cart" aria-hidden="true">
+    <div class="drawer-header">
+      <h2 class="drawer-title">Your Cart</h2>
+      <button class="icon-btn" id="cartClose" aria-label="Close cart">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <div class="cart-items" id="cartItems">
+      <p class="cart-empty" id="cartEmpty">Your cart is empty. Start shopping the showroom.</p>
+    </div>
+
+    <div class="cart-footer" id="cartFooter" hidden>
+      <div class="cart-total-row">
+        <span>Subtotal</span>
+        <span id="cartSubtotal">KES 0</span>
+      </div>
+      <button class="btn btn-accent btn-block" id="checkoutBtn">
+        <span class="btn-label">Proceed to Checkout</span>
+        <span class="btn-spinner" hidden></span>
+      </button>
+      <p class="cart-note">Secure checkout processed via encrypted serverless function.</p>
+    </div>
+  </aside>
+
+  <!-- ============================= -->
+  <!-- PRODUCT QUICK-VIEW MODAL       -->
+  <!-- ============================= -->
+  <div class="modal-scrim" id="quickViewScrim" hidden></div>
+  <div class="quick-view-modal" id="quickViewModal" role="dialog" aria-modal="true" aria-labelledby="qvTitle" hidden>
+    <button class="icon-btn modal-close" id="quickViewClose" aria-label="Close product view">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+    <div class="quick-view-body" id="quickViewBody">
+      <!-- Injected dynamically by app.js -->
+    </div>
+  </div>
+
+  <!-- ============================= -->
+  <!-- TOAST CONTAINER                -->
+  <!-- ============================= -->
+  <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- ============================= -->
+  <!-- FLOATING CONSULTATION FAB      -->
+  <!-- ============================= -->
+  <button class="fab-consult" id="fabConsult" aria-label="Chat with a sports gear consultant">
+    <span class="fab-pulse" aria-hidden="true"></span>
+    <svg class="fab-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M20.52 3.48A11.94 11.94 0 0 0 12.04 0C5.5 0 .2 5.3.2 11.84c0 2.08.55 4.11 1.6 5.9L0 24l6.44-1.69a11.86 11.86 0 0 0 5.6 1.43h.01c6.54 0 11.84-5.3 11.84-11.84 0-3.16-1.23-6.13-3.37-8.42Zm-8.48 18.2h-.01a9.85 9.85 0 0 1-5.02-1.37l-.36-.21-3.82 1 1.02-3.72-.24-.38a9.83 9.83 0 0 1-1.5-5.16c0-5.44 4.43-9.87 9.88-9.87 2.64 0 5.12 1.03 6.98 2.9a9.8 9.8 0 0 1 2.89 6.98c0 5.45-4.43 9.87-9.82 9.83Z"/>
+    </svg>
+  </button>
+
+  <div class="fab-tooltip" id="fabTooltip" hidden>
+    <p>Need help picking gear? We're online.</p>
+    <a href="https://wa.me/254700000000" target="_blank" rel="noopener" class="btn btn-accent btn-sm">Start Chat</a>
+  </div>
+
+  <!-- ============================= -->
+  <!-- SCRIPTS                        -->
+  <!-- ============================= -->
+  <script src="js/config.js"></script>
+  <script src="js/baas-client.js"></script>
+  <script src="js/faas-service.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
