@@ -2,45 +2,31 @@
    BAARI SPORTS CENTER — config.js
    Environment variables, API endpoints & app-wide constants.
    NO SECRETS LIVE HERE. This file is public and ships to the
-   browser. Anything sensitive (payment keys, WhatsApp tokens)
-   stays inside /functions on the FaaS layer.
+   browser. The Supabase anon key below is a public, RLS-scoped
+   key — safe to expose. It can only do what the database's Row
+   Level Security policies explicitly allow (public read of
+   active products/categories, public insert of orders/kit
+   requests). Nothing else.
    ========================================================= */
 
 const BAARI_CONFIG = Object.freeze({
 
   // ---------------------------------------------------------
-  // PATHWAY A — Direct BaaS connection (PocketBase instance)
-  // Public reads only: products, categories, live stock counts.
+  // SUPABASE — backend project
+  // Replace these two values once the Supabase project for
+  // Baari Sports Center exists. Until then the storefront runs
+  // in a safe "backend not connected" state (see app.js).
   // ---------------------------------------------------------
-  BAAS: Object.freeze({
-    BASE_URL: 'https://baas.baarisports.co.ke',
-    COLLECTIONS: Object.freeze({
+  SUPABASE: Object.freeze({
+    URL: 'https://ccnjlyytxbhqhwybobei.supabase.co',
+    ANON_KEY: 'sb_publishable_e3Zx40VklZr4uL0hP3CT4g_8uU0TE6m',
+    TABLES: Object.freeze({
       PRODUCTS: 'products',
       CATEGORIES: 'categories',
       ORDERS: 'orders',
       KIT_REQUESTS: 'kit_requests',
     }),
-    // Realtime subscription topics (Pathway A)
-    REALTIME_TOPICS: Object.freeze({
-      STOCK_UPDATES: 'products',
-      NEW_ARRIVALS: 'products',
-    }),
-    PAGE_SIZE: 20,
-  }),
-
-  // ---------------------------------------------------------
-  // PATHWAY B — Ephemeral FaaS endpoints
-  // These functions hold secret keys server-side and are the
-  // ONLY layer permitted to write elevated/financial records.
-  // ---------------------------------------------------------
-  FAAS: Object.freeze({
-    BASE_URL: 'https://functions.baarisports.co.ke',
-    ENDPOINTS: Object.freeze({
-      CHECKOUT: '/checkout',
-      CUSTOM_KITS: '/custom-kits',
-      NOTIFICATIONS: '/notifications',
-    }),
-    TIMEOUT_MS: 15000,
+    STORAGE_BUCKET: 'product-images',
   }),
 
   // ---------------------------------------------------------
@@ -49,19 +35,17 @@ const BAARI_CONFIG = Object.freeze({
   STORE: Object.freeze({
     NAME: 'Baari Sports Center',
     LOCATION: 'Kimana Town, Oloitokitok Sub-County, Kajiado County',
-    WHATSAPP_NUMBER: '254700000000', // digits only, no + prefix
+    WHATSAPP_NUMBER: '254702453813', // digits only, no + prefix
     CURRENCY: 'KES',
     CURRENCY_LOCALE: 'en-KE',
-    SUPPORT_EMAIL: 'hello@baarisports.co.ke',
   }),
 
   // ---------------------------------------------------------
   // CUSTOM KIT PRICING BASELINES
-  // Used for the CLIENT-SIDE instant estimate shown in the
-  // calculator UI. The authoritative, final price is always
-  // recalculated server-side by functions/custom-kits before
-  // any order is confirmed (Pathway B), so these numbers are
-  // safe to expose publicly.
+  // Used for the client-side instant estimate shown in the
+  // calculator UI before the request is submitted. The store
+  // owner reviews and sets the authoritative price from the
+  // admin dashboard once the request lands.
   // ---------------------------------------------------------
   KIT_PRICING: Object.freeze({
     BASE_UNIT_PRICE: Object.freeze({
@@ -96,6 +80,7 @@ const BAARI_CONFIG = Object.freeze({
     WISHLIST_STORAGE_KEY: 'baari_wishlist_v1',
     RECENT_SEARCH_KEY: 'baari_recent_search_v1',
     LIVE_STRIP_ROTATE_MS: 5000,
+    PRODUCTS_PAGE_SIZE: 20,
   }),
 
   // ---------------------------------------------------------

@@ -1,7 +1,9 @@
 /* =========================================================
    BAARI SPORTS CENTER — app.js
    Event handling, scroll-spy nav, cart state, DOM rendering.
-   Orchestrates BaasClient (Pathway A) + FaasService (Pathway B).
+   Orchestrates BaariDB (Supabase) for reads/writes and builds
+   the WhatsApp order-forwarding handoff after each checkout
+   or kit-quote submission.
    ========================================================= */
 
 (() => {
@@ -17,7 +19,7 @@
     currentCategory: 'all',
     currentFilter: 'all',
     currentPage: 1,
-    totalPages: 1,
+    hasMore: false,
     isLoading: false,
     cart: loadCart(),
     wishlist: loadWishlist(),
@@ -91,20 +93,43 @@
     bindSmoothScrollLinks();
 
     renderCartBadge();
+    loadCategories();
     loadInitialProducts();
     connectLiveInventory();
     maybeShowFabTooltipOnce();
+    setFooterYear();
+
+    if (!BaariDB.isConfigured()) {
+      dom.liveStripText.textContent = 'Store backend not connected yet — showing offline mode.';
+    }
+  }
+
+  function setFooterYear() {
+    const el = document.getElementById('footerYear');
+    if (el) el.textContent = new Date().getFullYear();
+  }
+
+  /* ======================================================= */
+  /* CATEGORY SUB-NAV (rendered from the categories table)     */
+  /* ======================================================= */
+  async function loadCategories() {
+    const categories = await BaariDB.fetchCategories();
+    if (!categories.length) return;
+
+    const chips = categories.map((c) =>
+      `<button class="sub-nav-item" data-category="${escapeHtml(c.slug)}">${escapeHtml(c.label)}</button>`
+    ).join('');
+
+    dom.subNavTrack.insertAdjacentHTML('beforeend', chips);
   }
 
   /* ======================================================= */
   /* HEADER / SCROLL SHADOW                                     */
   /* ======================================================= */
   function bindHeaderEvents() {
-    let lastScrollY = window.scrollY;
     window.addEventListener('scroll', () => {
       const y = window.scrollY;
       dom.header.classList.toggle('is-scrolled', y > 8);
-      lastScrollY = y;
     }, { passive: true });
   }
 
@@ -113,9 +138,6 @@
   /* ======================================================= */
   function bindDrawerEvents() {
     dom.menuTrigger.addEventListener('click', () => {
-      // Toggle off the trigger's own current aria-expanded state rather
-      // than assuming — guarantees a single tap always flips correctly
-      // even if focus/DOM state changed elsewhere.
       const isOpen = dom.menuTrigger.getAttribute('aria-expanded') === 'true';
       isOpen ? closeDrawer() : openDrawer();
     });
@@ -129,10 +151,6 @@
     });
   }
 
-  // openDrawer/closeDrawer are the ONLY functions permitted to touch
-  // .is-open on #mobileDrawer or aria-expanded on #menuTrigger — both
-  // are always set together here so the CSS X-morph (keyed off
-  // aria-expanded) can never desync from the drawer's actual state.
   function openDrawer() {
     dom.drawer.classList.add('is-open');
     dom.drawer.setAttribute('aria-hidden', 'false');
@@ -189,7 +207,7 @@
 
     dom.searchResults.innerHTML = renderMiniSkeletons(4);
 
-    const { items } = await BaasClient.fetchProducts({ query, perPage: 12 });
+    const { items } = await BaariDB.fetchProducts({ query, perPage: 12 });
 
     if (!items.length) {
       dom.searchResults.innerHTML = `<p class="cart-empty">No products found for "${escapeHtml(query)}".</p>`;
@@ -208,7 +226,6 @@
     dom.cartScrim.addEventListener('click', closeCart);
     dom.checkoutBtn.addEventListener('click', handleCheckout);
 
-    // Event delegation for qty +/- and remove inside cart items
     dom.cartItems.addEventListener('click', (e) => {
       const incBtn = e.target.closest('[data-cart-inc]');
       const decBtn = e.target.closest('[data-cart-dec]');
@@ -313,11 +330,11 @@
           </div>
           <button class="cart-line-remove" data-cart-remove="${item.productId}" data-size="${item.size || ''}">Remove</button>
         </div>
-        <span class="cart-line-price">${BaasClient.formatCurrency(item.price * item.quantity)}</span>
+        <span class="cart-line-price">${BaariDB.formatCurrency(item.price * item.quantity)}</span>
       </div>
     `).join('');
 
-    dom.cartSubtotal.textContent = BaasClient.formatCurrency(cartSubtotal());
+    dom.cartSubtotal.textContent = BaariDB.formatCurrency(cartSubtotal());
   }
 
   function renderCartBadge() {
@@ -344,14 +361,17 @@
   }
 
   /* ======================================================= */
-  /* CHECKOUT (Pathway B)                                       */
+  /* CHECKOUT — logs order to Supabase, then hands off to      */
+  /* WhatsApp with a prefilled order summary. The Supabase      */
+  /* write never blocks the WhatsApp handoff: if it fails, the  */
+  /* customer's order still reaches the owner via WhatsApp.     */
   /* ======================================================= */
   async function handleCheckout() {
     if (state.cart.length === 0) return;
 
     const name = prompt('Your full name for this order:');
     if (!name) return;
-    const phoneRaw = prompt('Your M-Pesa phone number (e.g. 07XXXXXXXX):');
+    const phoneRaw = prompt('Your phone number (e.g. 07XXXXXXXX):');
     if (!phoneRaw) return;
 
     if (!isValidKenyanPhone(phoneRaw)) {
@@ -359,41 +379,55 @@
       return;
     }
     const phone = normalizeKenyanPhone(phoneRaw);
-
     const location = prompt('Delivery / pickup location in Kimana area:') || '';
 
     setBtnLoading(dom.checkoutBtn, true);
 
+    const total = cartSubtotal();
+    const cartSnapshot = state.cart.slice();
+
     try {
-      const result = await FaasService.submitCheckout({
-        items: state.cart.map((i) => ({
+      await BaariDB.submitOrder({
+        items: cartSnapshot.map((i) => ({
           productId: i.productId,
-          quantity: i.quantity,
+          name: i.name,
           size: i.size,
+          qty: i.quantity,
+          price: i.price,
         })),
         customer: { name, phone, location },
-        paymentMethod: 'mpesa',
+        total,
       });
-
-      showToast('Order submitted! Check your phone to complete M-Pesa payment.', 'success');
-
-      await FaasService.triggerNotification({
-        orderId: result.orderId,
-        type: 'order_confirmation',
-        phone,
-      });
-
-      state.cart = [];
-      persistCart();
-      renderCart();
-      renderCartBadge();
-      closeCart();
     } catch (err) {
-      console.error('[app] Checkout failed:', err);
-      showToast(err.message || 'Checkout failed. Please try again or WhatsApp us directly.', 'error');
-    } finally {
-      setBtnLoading(dom.checkoutBtn, false);
+      console.error('[app] Order logging failed (WhatsApp handoff continues):', err);
     }
+
+    sendOrderToWhatsApp({ name, phone, location, items: cartSnapshot, total });
+
+    state.cart = [];
+    persistCart();
+    renderCart();
+    renderCartBadge();
+    closeCart();
+    setBtnLoading(dom.checkoutBtn, false);
+    showToast('Redirecting to WhatsApp to confirm your order…', 'success');
+  }
+
+  function sendOrderToWhatsApp({ name, phone, location, items, total }) {
+    const lines = items.map((i) =>
+      `▸ ${i.name}${i.size ? `\n   Size: ${i.size}` : ''}  |  Qty: ${i.quantity}  |  ${BaariDB.formatCurrency(i.price * i.quantity)}`
+    ).join('\n');
+
+    const message = [
+      `🛒 *NEW ORDER — ${CFG.STORE.NAME.toUpperCase()}*`, '─────────────────────', '',
+      '👤 *Customer Details*', `Name: ${name}`, `Phone: ${phone}`, `Delivery/Pickup: ${location}`, '',
+      '📦 *Order Summary*', '─────────────────────', lines,
+      '─────────────────────', `*TOTAL: ${BaariDB.formatCurrency(total)}*`, '',
+      '✅ Please confirm availability and payment details.', '',
+      `— Sent via ${CFG.STORE.NAME}`,
+    ].join('\n');
+
+    window.open(`https://wa.me/${CFG.STORE.WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');
   }
 
   /* ======================================================= */
@@ -426,14 +460,14 @@
   }
 
   /* ======================================================= */
-  /* PRODUCT GRID RENDERING (Pathway A)                         */
+  /* PRODUCT GRID RENDERING                                     */
   /* ======================================================= */
   async function loadInitialProducts() {
     state.isLoading = true;
     dom.productGrid.setAttribute('aria-busy', 'true');
     dom.productGrid.innerHTML = renderMiniSkeletons(8);
 
-    const { items, totalPages, page } = await BaasClient.fetchProducts({
+    const { items, hasMore, page } = await BaariDB.fetchProducts({
       page: 1,
       category: state.currentCategory,
       filter: state.currentFilter,
@@ -441,21 +475,21 @@
 
     state.products = items;
     state.currentPage = page;
-    state.totalPages = totalPages;
+    state.hasMore = hasMore;
     state.isLoading = false;
 
     renderProductGrid();
-    dom.loadMoreBtn.hidden = state.currentPage >= state.totalPages;
+    dom.loadMoreBtn.hidden = !state.hasMore;
     dom.productGrid.removeAttribute('aria-busy');
   }
 
   async function loadMoreProducts() {
-    if (state.isLoading || state.currentPage >= state.totalPages) return;
+    if (state.isLoading || !state.hasMore) return;
 
     state.isLoading = true;
     setBtnLoading(dom.loadMoreBtn, true);
 
-    const { items, totalPages, page } = await BaasClient.fetchProducts({
+    const { items, hasMore, page } = await BaariDB.fetchProducts({
       page: state.currentPage + 1,
       category: state.currentCategory,
       filter: state.currentFilter,
@@ -463,11 +497,11 @@
 
     state.products = state.products.concat(items);
     state.currentPage = page;
-    state.totalPages = totalPages;
+    state.hasMore = hasMore;
     state.isLoading = false;
 
     renderProductGrid();
-    dom.loadMoreBtn.hidden = state.currentPage >= state.totalPages;
+    dom.loadMoreBtn.hidden = !state.hasMore;
     setBtnLoading(dom.loadMoreBtn, false);
   }
 
@@ -500,11 +534,11 @@
           <img src="${product.imageUrl || placeholderImage()}" alt="${escapeHtml(product.name)}" loading="lazy">
         </div>
         <div class="product-card-body">
-          <span class="product-card-category">${escapeHtml(product.category)}</span>
+          <span class="product-card-category">${escapeHtml(product.categoryLabel || product.category)}</span>
           <h3 class="product-card-name">${escapeHtml(product.name)}</h3>
           <div class="product-card-price-row">
-            <span class="product-card-price">${BaasClient.formatCurrency(product.salePrice ?? product.price)}</span>
-            ${onSale ? `<span class="product-card-price-old">${BaasClient.formatCurrency(product.price)}</span>` : ''}
+            <span class="product-card-price">${BaariDB.formatCurrency(product.salePrice ?? product.price)}</span>
+            ${onSale ? `<span class="product-card-price-old">${BaariDB.formatCurrency(product.price)}</span>` : ''}
           </div>
           <button class="product-card-add" data-quick-add="${product.id}" ${outOfStock ? 'disabled' : ''}>
             ${outOfStock ? 'Out of Stock' : 'Add to Cart'}
@@ -524,7 +558,6 @@
     `).join('');
   }
 
-  /* Event delegation for the whole grid: add-to-cart, quick view, wishlist */
   document.addEventListener('click', (e) => {
     const quickAddBtn = e.target.closest('[data-quick-add]');
     const quickViewMedia = e.target.closest('[data-quick-view]');
@@ -625,7 +658,7 @@
         <img src="${product.imageUrl || placeholderImage()}" alt="${escapeHtml(product.name)}">
       </div>
       <h2 class="qv-title" id="qvTitle">${escapeHtml(product.name)}</h2>
-      <p class="qv-price">${BaasClient.formatCurrency(product.salePrice ?? product.price)}</p>
+      <p class="qv-price">${BaariDB.formatCurrency(product.salePrice ?? product.price)}</p>
       ${product.sizes?.length ? `
         <div class="qv-size-grid">
           ${product.sizes.map((s) => `<button class="qv-size-btn" data-qv-size="${escapeHtml(s)}">${escapeHtml(s)}</button>`).join('')}
@@ -651,7 +684,9 @@
   }
 
   /* ======================================================= */
-  /* CUSTOM KIT CALCULATOR (client estimate + Pathway B quote) */
+  /* CUSTOM KIT CALCULATOR — client estimate, then logs the    */
+  /* request to Supabase and hands off to WhatsApp for the     */
+  /* owner to confirm a final price.                            */
   /* ======================================================= */
   function bindKitCalculatorEvents() {
     const inputs = dom.kitForm.querySelectorAll('select, input');
@@ -661,20 +696,23 @@
     updateKitEstimate();
   }
 
+  function calculateKitEstimate(garment, quantity, printing) {
+    const { BASE_UNIT_PRICE, PRINTING_SURCHARGE, BULK_DISCOUNT_TIERS } = CFG.KIT_PRICING;
+    const unitPrice = (BASE_UNIT_PRICE[garment] || 0) + (PRINTING_SURCHARGE[printing] || 0);
+    const tier = BULK_DISCOUNT_TIERS.find((t) => quantity >= t.minQty) || { discount: 0 };
+    const rawTotal = unitPrice * quantity;
+    return { total: rawTotal * (1 - tier.discount), discount: tier.discount };
+  }
+
   function updateKitEstimate() {
     const garment = dom.kitForm.garment.value;
     const quantity = Math.max(0, Number(dom.kitForm.quantity.value) || 0);
     const printing = dom.kitForm.printing.value;
 
-    const { BASE_UNIT_PRICE, PRINTING_SURCHARGE, BULK_DISCOUNT_TIERS } = CFG.KIT_PRICING;
-
-    const unitPrice = (BASE_UNIT_PRICE[garment] || 0) + (PRINTING_SURCHARGE[printing] || 0);
-    const tier = BULK_DISCOUNT_TIERS.find((t) => quantity >= t.minQty) || { discount: 0 };
-    const rawTotal = unitPrice * quantity;
-    const total = rawTotal * (1 - tier.discount);
+    const { total, discount } = calculateKitEstimate(garment, quantity, printing);
 
     dom.kitPriceValue.textContent = quantity > 0
-      ? `${BaasClient.formatCurrency(total)}${tier.discount > 0 ? ` (${tier.discount * 100}% bulk off)` : ''}`
+      ? `${BaariDB.formatCurrency(total)}${discount > 0 ? ` (${discount * 100}% bulk off)` : ''}`
       : `${CFG.STORE.CURRENCY} —`;
   }
 
@@ -699,51 +737,75 @@
 
     setBtnLoading(dom.kitSubmitBtn, true);
 
+    const { total: estimatedTotal } = calculateKitEstimate(garment, quantity, printing);
+
     try {
-      const quote = await FaasService.requestKitQuote({
+      await BaariDB.submitKitRequest({
         garment,
         quantity,
         printing,
         notes,
         customer: { name, phone },
+        estimatedTotal,
       });
-
-      showToast(`Quote requested! Final price: ${BaasClient.formatCurrency(quote.finalPrice || 0)}. We'll confirm via WhatsApp.`, 'success');
-
-      await FaasService.triggerNotification({
-        orderId: quote.requestId,
-        type: 'kit_quote',
-        phone,
-      });
-
-      dom.kitForm.reset();
-      updateKitEstimate();
     } catch (err) {
-      console.error('[app] Kit quote request failed:', err);
-      showToast(err.message || 'Could not submit your quote request. Please try WhatsApp instead.', 'error');
-    } finally {
-      setBtnLoading(dom.kitSubmitBtn, false);
+      console.error('[app] Kit request logging failed (WhatsApp handoff continues):', err);
     }
+
+    sendKitRequestToWhatsApp({ garment, quantity, printing, notes, name, phone, estimatedTotal });
+
+    showToast('Request sent! We\u2019ll confirm your final quote on WhatsApp.', 'success');
+    dom.kitForm.reset();
+    updateKitEstimate();
+    setBtnLoading(dom.kitSubmitBtn, false);
+  }
+
+  function sendKitRequestToWhatsApp({ garment, quantity, printing, notes, name, phone, estimatedTotal }) {
+    const garmentLabels = {
+      jersey: 'Match Jersey', 'training-tee': 'Training Tee',
+      tracksuit: 'Tracksuit Set', shorts: 'Shorts',
+    };
+    const printingLabels = {
+      none: 'None', 'name-number': 'Name + Number', 'full-sponsor': 'Full Sponsor Set',
+    };
+
+    const message = [
+      `🏆 *CUSTOM KIT REQUEST — ${CFG.STORE.NAME.toUpperCase()}*`, '─────────────────────', '',
+      '👤 *Customer Details*', `Name: ${name}`, `Phone: ${phone}`, '',
+      '📦 *Kit Details*', '─────────────────────',
+      `Garment: ${garmentLabels[garment] || garment}`,
+      `Quantity: ${quantity}`,
+      `Printing: ${printingLabels[printing] || printing}`,
+      notes ? `Notes: ${notes}` : null,
+      '─────────────────────',
+      `*Estimated Total: ${BaariDB.formatCurrency(estimatedTotal)}*`, '',
+      '✅ Please confirm the final price and delivery timeline.', '',
+      `— Sent via ${CFG.STORE.NAME}`,
+    ].filter(Boolean).join('\n');
+
+    window.open(`https://wa.me/${CFG.STORE.WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');
   }
 
   /* ======================================================= */
-  /* LIVE INVENTORY STRIP (Pathway A realtime)                  */
+  /* LIVE INVENTORY STRIP (Supabase Realtime)                   */
   /* ======================================================= */
   function connectLiveInventory() {
-    BaasClient.connectRealtime();
+    BaariDB.connectRealtime();
 
-    BaasClient.onStockUpdate(({ action, product }) => {
+    BaariDB.onStockUpdate(({ action, product }) => {
       updateLiveStripMessage(action, product);
       mergeLiveProductIntoGrid(product);
     });
 
-    dom.liveStripText.textContent = 'Live inventory sync active.';
+    if (BaariDB.isConfigured()) {
+      dom.liveStripText.textContent = 'Live inventory sync active.';
+    }
   }
 
   function updateLiveStripMessage(action, product) {
-    if (action === 'update' && product.stockCount <= 3 && product.stockCount > 0) {
+    if (action === 'UPDATE' && product.stockCount <= 3 && product.stockCount > 0) {
       dom.liveStripText.textContent = `⚡ Only ${product.stockCount} left: ${product.name}`;
-    } else if (action === 'create') {
+    } else if (action === 'INSERT') {
       dom.liveStripText.textContent = `🆕 Just added: ${product.name}`;
     }
   }
@@ -796,7 +858,6 @@
 
         e.preventDefault();
 
-        // Close any open drawer/search BEFORE scheduling scroll (avoids scroll-lock traps)
         closeDrawer();
         closeSearch();
 
@@ -853,21 +914,12 @@
   /* ======================================================= */
   const KENYA_PHONE_REGEX = /^(\+?254|0)?[71]\d{8}$/;
 
-  /**
-   * Validates a Kenyan mobile number in any common input shape:
-   * 0712345678, 254712345678, +254712345678, 0112345678, etc.
-   */
   function isValidKenyanPhone(rawInput) {
     if (!rawInput) return false;
     const cleaned = String(rawInput).trim().replace(/[\s-]/g, '');
     return KENYA_PHONE_REGEX.test(cleaned);
   }
 
-  /**
-   * Normalizes any valid Kenyan mobile number into international
-   * format without a plus sign: 2547XXXXXXXX / 2541XXXXXXXX.
-   * Assumes the input has already passed isValidKenyanPhone.
-   */
   function normalizeKenyanPhone(rawInput) {
     let digits = String(rawInput).trim().replace(/[\s-]/g, '').replace(/^\+/, '');
 

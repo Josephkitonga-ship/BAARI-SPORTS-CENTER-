@@ -63,11 +63,7 @@
     <nav class="sub-nav" id="subNav" aria-label="Product categories">
       <div class="sub-nav-track" id="subNavTrack">
         <button class="sub-nav-item is-active" data-category="all">All</button>
-        <button class="sub-nav-item" data-category="jerseys">Jerseys</button>
-        <button class="sub-nav-item" data-category="boots">Boots</button>
-        <button class="sub-nav-item" data-category="training">Training</button>
-        <button class="sub-nav-item" data-category="accessories">Accessories</button>
-        <button class="sub-nav-item" data-category="team-kits">Team Kits</button>
+        <!-- Remaining category chips are rendered by app.js from the categories table -->
       </div>
     </nav>
   </header>
@@ -116,9 +112,10 @@
       <a href="#contact" data-scroll>Contact</a>
     </nav>
     <div class="drawer-footer">
-      <a href="https://wa.me/254700000000" class="btn btn-accent btn-block" target="_blank" rel="noopener">
+      <a href="https://wa.me/254702453813" class="btn btn-accent btn-block" target="_blank" rel="noopener">
         Chat on WhatsApp
       </a>
+      <a href="admin/admin.html" class="drawer-admin-link">Admin Login</a>
     </div>
   </aside>
 
@@ -259,6 +256,30 @@
   </main>
 
   <!-- ============================= -->
+  <!-- SITE FOOTER                    -->
+  <!-- ============================= -->
+  <footer class="site-footer" id="contact">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="logo-main">BAARI</span>
+        <span class="logo-sub">Sports Center</span>
+        <p class="footer-tagline">Kimana Town, Oloitokitok Sub-County, Kajiado County</p>
+      </div>
+      <nav class="footer-links" aria-label="Footer navigation">
+        <a href="#home" data-scroll>Home</a>
+        <a href="#showroom" data-scroll>Showroom</a>
+        <a href="#custom-kits" data-scroll>Custom Team Kits</a>
+        <a href="#about" data-scroll>About Us</a>
+        <a href="https://wa.me/254702453813" target="_blank" rel="noopener">WhatsApp Us</a>
+      </nav>
+      <div class="footer-meta">
+        <p>&copy; <span id="footerYear"></span> Baari Sports Center. All rights reserved.</p>
+        <a href="admin/admin.html" class="footer-admin-link">Admin Login</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================= -->
   <!-- CART DRAWER                    -->
   <!-- ============================= -->
   <div class="drawer-scrim" id="cartScrim" hidden></div>
@@ -286,7 +307,7 @@
         <span class="btn-label">Proceed to Checkout</span>
         <span class="btn-spinner" hidden></span>
       </button>
-      <p class="cart-note">Secure checkout processed via encrypted serverless function.</p>
+      <p class="cart-note">Order details are sent straight to our WhatsApp for confirmation.</p>
     </div>
   </aside>
 
@@ -323,15 +344,15 @@
 
   <div class="fab-tooltip" id="fabTooltip" hidden>
     <p>Need help picking gear? We're online.</p>
-    <a href="https://wa.me/254700000000" target="_blank" rel="noopener" class="btn btn-accent btn-sm">Start Chat</a>
+    <a href="https://wa.me/254702453813" target="_blank" rel="noopener" class="btn btn-accent btn-sm">Start Chat</a>
   </div>
 
   <!-- ============================= -->
   <!-- SCRIPTS                        -->
   <!-- ============================= -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/config.js"></script>
-  <script src="js/baas-client.js"></script>
-  <script src="js/faas-service.js"></script>
+  <script src="js/supabase-client.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

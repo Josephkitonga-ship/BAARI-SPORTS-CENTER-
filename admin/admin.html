@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#0A0A0A" />
+  <title>Admin — Baari Sports Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body class="admin-body">
+
+  <!-- ── LOGIN SCREEN ───────────────────────────────────────── -->
+  <div class="admin-login-screen" id="loginScreen">
+    <form class="admin-login-card" id="loginForm">
+      <div class="admin-login-logo">
+        <span class="logo-main">BAARI</span>
+        <span class="logo-sub">Admin</span>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="loginEmail">Email</label>
+        <input class="form-input" type="email" id="loginEmail" autocomplete="username" required />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="loginPassword">Password</label>
+        <input class="form-input" type="password" id="loginPassword" autocomplete="current-password" required />
+      </div>
+      <button class="btn btn--primary btn--full" type="submit" id="loginBtn">
+        <span class="btn-label">Sign In</span>
+        <span class="btn-spinner" hidden></span>
+      </button>
+      <p class="admin-login-error" id="loginError"></p>
+      <a href="../index.html" class="admin-login-back">← Back to Storefront</a>
+    </form>
+  </div>
+
+  <!-- ── ADMIN APP (hidden until authenticated) ─────────────── -->
+  <div class="admin-app" id="adminApp" hidden>
+
+    <header class="admin-header">
+      <div class="admin-header-inner">
+        <a href="../index.html" class="logo" aria-label="Baari Sports Center">
+          <span class="logo-main">BAARI</span>
+          <span class="logo-sub">Admin</span>
+        </a>
+        <nav class="admin-tabs" aria-label="Admin sections">
+          <button class="admin-tab admin-tab--active" data-tab="dashboard">Dashboard</button>
+          <button class="admin-tab" data-tab="products">Products</button>
+          <button class="admin-tab" data-tab="categories">Categories</button>
+          <button class="admin-tab" data-tab="orders">Orders</button>
+          <button class="admin-tab" data-tab="kits">Kit Requests</button>
+        </nav>
+        <div class="admin-header-actions">
+          <a href="../index.html" class="btn btn--ghost btn--sm">View Storefront</a>
+          <button class="btn btn--ghost btn--sm" id="logoutBtn">Sign Out</button>
+        </div>
+      </div>
+      <!-- Mobile tab select (admin-tabs collapses below a breakpoint) -->
+      <select class="admin-tabs-mobile" id="adminTabsMobile" aria-label="Admin sections">
+        <option value="dashboard">Dashboard</option>
+        <option value="products">Products</option>
+        <option value="categories">Categories</option>
+        <option value="orders">Orders</option>
+        <option value="kits">Kit Requests</option>
+      </select>
+    </header>
+
+    <main class="admin-main">
+
+      <!-- ── DASHBOARD TAB ───────────────────────────────────── -->
+      <section class="admin-panel admin-panel--active" id="panel-dashboard" aria-label="Dashboard">
+        <div class="admin-panel-header">
+          <h1 class="admin-panel-title">Dashboard</h1>
+        </div>
+
+        <div class="stat-strip" id="statStrip">
+          <div class="stat-card">
+            <span class="stat-card-value" id="statNewOrders">—</span>
+            <span class="stat-card-label">New Orders</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-card-value" id="statPendingKits">—</span>
+            <span class="stat-card-label">Pending Kit Quotes</span>
+          </div>
+          <div class="stat-card stat-card--warning">
+            <span class="stat-card-value" id="statLowStock">—</span>
+            <span class="stat-card-label">Low Stock Items</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-card-value" id="statTotalProducts">—</span>
+            <span class="stat-card-label">Active Products</span>
+          </div>
+        </div>
+
+        <div class="dashboard-feed">
+          <h2 class="admin-section-title">Recent Orders</h2>
+          <div class="order-feed" id="dashboardOrderFeed">
+            <p class="admin-table-empty">Loading…</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── PRODUCTS TAB ────────────────────────────────────── -->
+      <section class="admin-panel" id="panel-products" aria-label="Products">
+        <div class="admin-panel-header">
+          <h1 class="admin-panel-title">Products</h1>
+          <button class="btn btn--primary btn--sm" id="newProductBtn">+ Add Product</button>
+        </div>
+        <p class="admin-panel-hint" id="noCategoriesHint" hidden>You need at least one category before adding products. <span class="admin-table-link admin-table-link--accent" id="goToCategoriesLink">Add one now →</span></p>
+
+        <div class="admin-table-wrap">
+          <table class="admin-table" id="productsTable">
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Sizes</th>
+                <th>Status</th>
+                <th>Active</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="productsTableBody">
+              <tr><td colspan="9" class="admin-table-empty">Loading products…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ── CATEGORIES TAB ──────────────────────────────────── -->
+      <section class="admin-panel" id="panel-categories" aria-label="Categories">
+        <div class="admin-panel-header">
+          <h1 class="admin-panel-title">Categories</h1>
+          <button class="btn btn--primary btn--sm" id="newCategoryBtn">+ Add Category</button>
+        </div>
+        <p class="admin-panel-hint">These power the filter chips customers see on the storefront. Drag using the arrows to reorder.</p>
+
+        <div class="admin-table-wrap">
+          <table class="admin-table" id="categoriesTable">
+            <thead>
+              <tr>
+                <th>Order</th>
+                <th>Label</th>
+                <th>Slug</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="categoriesTableBody">
+              <tr><td colspan="4" class="admin-table-empty">Loading categories…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ── ORDERS TAB ──────────────────────────────────────── -->
+      <section class="admin-panel" id="panel-orders" aria-label="Orders">
+        <div class="admin-panel-header">
+          <h1 class="admin-panel-title">Orders</h1>
+          <button class="btn btn--ghost btn--sm" id="refreshOrdersBtn">Refresh</button>
+        </div>
+
+        <div class="order-feed order-feed--full" id="ordersFeed">
+          <p class="admin-table-empty">Loading orders…</p>
+        </div>
+      </section>
+
+      <!-- ── KIT REQUESTS TAB ────────────────────────────────── -->
+      <section class="admin-panel" id="panel-kits" aria-label="Kit Requests">
+        <div class="admin-panel-header">
+          <h1 class="admin-panel-title">Kit Requests</h1>
+          <button class="btn btn--ghost btn--sm" id="refreshKitsBtn">Refresh</button>
+        </div>
+
+        <div class="admin-table-wrap">
+          <table class="admin-table" id="kitsTable">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Customer</th>
+                <th>Phone</th>
+                <th>Garment</th>
+                <th>Qty</th>
+                <th>Printing</th>
+                <th>Est. Total</th>
+                <th>Final Price</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="kitsTableBody">
+              <tr><td colspan="10" class="admin-table-empty">Loading kit requests…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ── PRODUCT EDIT MODAL ─────────────────────────────────── -->
+  <div class="modal-scrim" id="productModalOverlay" role="dialog" aria-label="Edit product" aria-hidden="true" hidden>
+    <div class="admin-modal">
+      <div class="admin-modal-header">
+        <h2 class="admin-modal-title" id="productModalTitle">Add Product</h2>
+        <button class="icon-btn" id="productModalCloseBtn" aria-label="Close">✕</button>
+      </div>
+      <form class="admin-form" id="productForm">
+        <input type="hidden" id="productId" />
+        <div class="form-group">
+          <label class="form-label" for="productName">Name</label>
+          <input class="form-input" type="text" id="productName" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="productDescription">Description</label>
+          <textarea class="form-input" id="productDescription" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="productCategory">Category</label>
+          <select class="form-input" id="productCategory" required></select>
+        </div>
+        <div class="form-group form-group--row">
+          <div class="form-group">
+            <label class="form-label" for="productPrice">Price (KES)</label>
+            <input class="form-input" type="number" id="productPrice" min="0" step="1" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="productSalePrice">Sale Price <span class="form-optional">(optional)</span></label>
+            <input class="form-input" type="number" id="productSalePrice" min="0" step="1" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="productStock">Stock Count</label>
+          <input class="form-input" type="number" id="productStock" min="0" step="1" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="productSizes">Sizes <span class="form-optional">(comma-separated, e.g. S, M, L, XL)</span></label>
+          <input class="form-input" type="text" id="productSizes" placeholder="S, M, L, XL" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="productImage">Image URL</label>
+          <input class="form-input" type="url" id="productImage" placeholder="https://..." required />
+        </div>
+        <div class="form-group form-group--checks">
+          <label class="admin-checkbox-label">
+            <input type="checkbox" id="productIsNew" />
+            <span>Mark as New Arrival</span>
+          </label>
+          <label class="admin-checkbox-label">
+            <input type="checkbox" id="productActive" checked />
+            <span>Active (visible on storefront)</span>
+          </label>
+        </div>
+        <button class="btn btn--primary btn--full" type="submit" id="productSaveBtn">
+          <span class="btn-label">Save Product</span>
+          <span class="btn-spinner" hidden></span>
+        </button>
+        <p class="admin-form-error" id="productFormError"></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- ── CATEGORY EDIT MODAL ─────────────────────────────────── -->
+  <div class="modal-scrim" id="categoryModalOverlay" role="dialog" aria-label="Edit category" aria-hidden="true" hidden>
+    <div class="admin-modal admin-modal--sm">
+      <div class="admin-modal-header">
+        <h2 class="admin-modal-title" id="categoryModalTitle">Add Category</h2>
+        <button class="icon-btn" id="categoryModalCloseBtn" aria-label="Close">✕</button>
+      </div>
+      <form class="admin-form" id="categoryForm">
+        <input type="hidden" id="categoryId" />
+        <div class="form-group">
+          <label class="form-label" for="categoryLabel">Label <span class="form-optional">(shown to customers)</span></label>
+          <input class="form-input" type="text" id="categoryLabel" placeholder="e.g. Jerseys" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="categorySlug">Slug <span class="form-optional">(used internally, no spaces)</span></label>
+          <input class="form-input" type="text" id="categorySlug" placeholder="e.g. jerseys" pattern="[a-z0-9\-]+" required />
+        </div>
+        <button class="btn btn--primary btn--full" type="submit" id="categorySaveBtn">
+          <span class="btn-label">Save Category</span>
+          <span class="btn-spinner" hidden></span>
+        </button>
+        <p class="admin-form-error" id="categoryFormError"></p>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="assertive" aria-atomic="true"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="../js/config.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
