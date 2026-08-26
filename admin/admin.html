@@ -244,8 +244,21 @@
           <input class="form-input" type="text" id="productSizes" placeholder="S, M, L, XL" />
         </div>
         <div class="form-group">
-          <label class="form-label" for="productImage">Image URL</label>
-          <input class="form-input" type="url" id="productImage" placeholder="https://..." required />
+          <label class="form-label" for="productImageFile">Product Photo</label>
+          <div class="image-upload-widget">
+            <div class="image-upload-preview" id="imageUploadPreview">
+              <span class="image-upload-empty" id="imageUploadEmpty">No photo selected</span>
+              <img id="imageUploadPreviewImg" alt="Product preview" hidden />
+            </div>
+            <div class="image-upload-controls">
+              <label class="btn btn--ghost btn--sm image-upload-btn" for="productImageFile">
+                <span id="imageUploadBtnLabel">Choose Photo</span>
+              </label>
+              <input type="file" id="productImageFile" accept="image/png, image/jpeg, image/webp" hidden />
+              <span class="image-upload-status" id="imageUploadStatus"></span>
+            </div>
+          </div>
+          <input type="hidden" id="productImage" required />
         </div>
         <div class="form-group form-group--checks">
           <label class="admin-checkbox-label">

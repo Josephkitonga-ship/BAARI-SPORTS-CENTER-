@@ -383,6 +383,8 @@ const openProductModal = async (product = null) => {
   $('productIsNew').checked = !!product?.is_new;
   $('productActive').checked = product ? !!product.active : true;
 
+  resetImageUploadWidget(product?.image_url || null);
+
   $('productModalOverlay').hidden = false;
   $('productModalOverlay').setAttribute('aria-hidden', 'false');
 };
@@ -395,10 +397,125 @@ $('goToCategoriesLink')?.addEventListener('click', () => activateTab('categories
 $('productModalCloseBtn')?.addEventListener('click', closeProductModal);
 $('productModalOverlay')?.addEventListener('click', (e) => e.target === $('productModalOverlay') && closeProductModal());
 
+/* ── IMAGE UPLOAD WIDGET ──────────────────────────────────── */
+let _imageUploadInProgress = false;
+
+function resetImageUploadWidget(existingUrl) {
+  _imageUploadInProgress = false;
+  $('productImageFile').value = '';
+  $('imageUploadStatus').textContent = '';
+  $('imageUploadStatus').className = 'image-upload-status';
+  $('imageUploadBtnLabel').textContent = existingUrl ? 'Change Photo' : 'Choose Photo';
+
+  if (existingUrl) {
+    $('imageUploadPreviewImg').src = existingUrl;
+    $('imageUploadPreviewImg').hidden = false;
+    $('imageUploadEmpty').hidden = true;
+  } else {
+    $('imageUploadPreviewImg').hidden = true;
+    $('imageUploadPreviewImg').src = '';
+    $('imageUploadEmpty').hidden = false;
+  }
+}
+
+/** Resizes/compresses an image file in the browser before upload, capping
+ *  the longest edge at 1200px and re-encoding as JPEG at 82% quality — keeps
+ *  phone-camera photos (often 3-8MB) well under Supabase's free storage cap. */
+function compressImage(file, maxDimension = 1200, quality = 0.82) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const reader = new FileReader();
+
+    reader.onerror = () => reject(new Error('Could not read the selected file.'));
+    reader.onload = (e) => { img.src = e.target.result; };
+
+    img.onerror = () => reject(new Error('Could not load the selected image.'));
+    img.onload = () => {
+      let { width, height } = img;
+      if (width > maxDimension || height > maxDimension) {
+        const scale = maxDimension / Math.max(width, height);
+        width = Math.round(width * scale);
+        height = Math.round(height * scale);
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+
+      canvas.toBlob(
+        (blob) => blob ? resolve(blob) : reject(new Error('Image compression failed.')),
+        'image/jpeg',
+        quality
+      );
+    };
+
+    reader.readAsDataURL(file);
+  });
+}
+
+$('productImageFile')?.addEventListener('change', async (e) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  const statusEl = $('imageUploadStatus');
+  const MAX_SOURCE_MB = 15;
+
+  if (file.size > MAX_SOURCE_MB * 1024 * 1024) {
+    statusEl.textContent = `File too large (max ${MAX_SOURCE_MB}MB before compression).`;
+    statusEl.className = 'image-upload-status is-error';
+    e.target.value = '';
+    return;
+  }
+
+  _imageUploadInProgress = true;
+  statusEl.textContent = 'Compressing…';
+  statusEl.className = 'image-upload-status is-uploading';
+
+  try {
+    const compressedBlob = await compressImage(file);
+
+    // Show preview immediately from the compressed blob, no need to wait on the network.
+    const previewUrl = URL.createObjectURL(compressedBlob);
+    $('imageUploadPreviewImg').src = previewUrl;
+    $('imageUploadPreviewImg').hidden = false;
+    $('imageUploadEmpty').hidden = true;
+
+    statusEl.textContent = 'Uploading…';
+
+    const filename = `product-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.jpg`;
+    const { error: uploadError } = await db.storage
+      .from(BAARI_CONFIG.SUPABASE.STORAGE_BUCKET)
+      .upload(filename, compressedBlob, { contentType: 'image/jpeg', upsert: false });
+
+    if (uploadError) throw uploadError;
+
+    const { data: urlData } = db.storage
+      .from(BAARI_CONFIG.SUPABASE.STORAGE_BUCKET)
+      .getPublicUrl(filename);
+
+    $('productImage').value = urlData.publicUrl;
+    statusEl.textContent = 'Photo uploaded.';
+    statusEl.className = 'image-upload-status is-success';
+    $('imageUploadBtnLabel').textContent = 'Change Photo';
+  } catch (err) {
+    console.error('[admin] Image upload failed:', err);
+    statusEl.textContent = 'Upload failed. Please try again.';
+    statusEl.className = 'image-upload-status is-error';
+  } finally {
+    _imageUploadInProgress = false;
+  }
+});
+
 $('productForm')?.addEventListener('submit', async (e) => {
   e.preventDefault();
   const errEl = $('productFormError');
   errEl.textContent = '';
+
+  if (_imageUploadInProgress) {
+    errEl.textContent = 'Please wait for the photo to finish uploading.';
+    return;
+  }
 
   const id = $('productId').value || null;
   const name = $('productName').value.trim();
@@ -412,7 +529,11 @@ $('productForm')?.addEventListener('submit', async (e) => {
   const is_new = $('productIsNew').checked;
   const active = $('productActive').checked;
 
-  if (!name || !image_url || Number.isNaN(price) || price < 0 || Number.isNaN(stock_count) || stock_count < 0) {
+  if (!name || !image_url) {
+    errEl.textContent = !image_url ? 'Please upload a product photo.' : 'Please fill in all required fields correctly.';
+    return;
+  }
+  if (Number.isNaN(price) || price < 0 || Number.isNaN(stock_count) || stock_count < 0) {
     errEl.textContent = 'Please fill in all required fields correctly.';
     return;
   }
