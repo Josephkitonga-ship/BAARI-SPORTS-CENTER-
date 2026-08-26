@@ -727,3 +727,81 @@ body.drawer-is-open {
   transition: color var(--dur-fast) var(--ease-out);
 }
 .drawer-admin-link:hover { color: var(--accent); }
+
+/* -------------------- CHECKOUT VIEW (in cart drawer) -------------------- */
+.checkout-view {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  -webkit-overflow-scrolling: touch;
+}
+
+.checkout-back-link {
+  align-self: flex-start;
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-xs);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.checkout-back-link:hover { color: var(--text-primary); }
+
+.checkout-order-summary {
+  background: var(--surface-raised);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm);
+  font-size: var(--fs-xs);
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: var(--space-xs);
+}
+
+.checkout-view .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.checkout-view .form-label {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: .04em;
+  color: var(--text-secondary);
+}
+
+.checkout-view .form-input {
+  width: 100%;
+  background: var(--surface-raised);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  padding: 11px 13px;
+  font-size: var(--fs-body);
+  font-family: var(--font-body);
+  outline: none;
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+.checkout-view .form-input:focus { border-color: var(--accent); }
+.checkout-view .form-input.is-invalid { border-color: var(--danger); }
+
+.field-error {
+  font-size: .68rem;
+  color: var(--danger);
+  min-height: 1em;
+}
+
+.checkout-total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin: var(--space-sm) 0;
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--surface-border);
+  font-family: var(--font-header);
+  font-weight: 800;
+  font-size: 1.2rem;
+}

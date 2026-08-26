@@ -285,7 +285,7 @@
   <div class="drawer-scrim" id="cartScrim" hidden></div>
   <aside class="cart-drawer" id="cartDrawer" aria-label="Shopping cart" aria-hidden="true">
     <div class="drawer-header">
-      <h2 class="drawer-title">Your Cart</h2>
+      <h2 class="drawer-title" id="cartDrawerTitle">Your Cart</h2>
       <button class="icon-btn" id="cartClose" aria-label="Close cart">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -294,6 +294,7 @@
       </button>
     </div>
 
+    <!-- CART VIEW -->
     <div class="cart-items" id="cartItems">
       <p class="cart-empty" id="cartEmpty">Your cart is empty. Start shopping the showroom.</p>
     </div>
@@ -305,10 +306,45 @@
       </div>
       <button class="btn btn-accent btn-block" id="checkoutBtn">
         <span class="btn-label">Proceed to Checkout</span>
-        <span class="btn-spinner" hidden></span>
       </button>
       <p class="cart-note">Order details are sent straight to our WhatsApp for confirmation.</p>
     </div>
+
+    <!-- CHECKOUT DETAILS VIEW -->
+    <form class="checkout-view" id="checkoutView" hidden novalidate>
+      <button type="button" class="checkout-back-link" id="checkoutBackBtn">← Back to cart</button>
+
+      <div class="checkout-order-summary" id="checkoutOrderSummary"></div>
+
+      <div class="form-group">
+        <label class="form-label" for="checkoutName">Full Name</label>
+        <input class="form-input" type="text" id="checkoutName" autocomplete="name" required />
+        <p class="field-error" id="checkoutNameError"></p>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="checkoutPhone">Phone Number</label>
+        <input class="form-input" type="tel" id="checkoutPhone" placeholder="07XXXXXXXX" autocomplete="tel" required />
+        <p class="field-error" id="checkoutPhoneError"></p>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="checkoutLocation">Delivery / Pickup Location</label>
+        <input class="form-input" type="text" id="checkoutLocation" placeholder="e.g. Kimana Town centre" autocomplete="street-address" required />
+        <p class="field-error" id="checkoutLocationError"></p>
+      </div>
+
+      <div class="checkout-total-row">
+        <span>Total</span>
+        <span id="checkoutTotal">KES 0</span>
+      </div>
+
+      <button class="btn btn-accent btn-block" type="submit" id="checkoutSubmitBtn">
+        <span class="btn-label">Place Order</span>
+        <span class="btn-spinner" hidden></span>
+      </button>
+      <p class="cart-note">Order details are sent straight to our WhatsApp for confirmation.</p>
+    </form>
   </aside>
 
   <!-- ============================= -->

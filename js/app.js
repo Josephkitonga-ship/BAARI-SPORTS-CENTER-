@@ -56,6 +56,19 @@
     cartSubtotal: document.getElementById('cartSubtotal'),
     checkoutBtn: document.getElementById('checkoutBtn'),
 
+    cartDrawerTitle: document.getElementById('cartDrawerTitle'),
+    checkoutView: document.getElementById('checkoutView'),
+    checkoutBackBtn: document.getElementById('checkoutBackBtn'),
+    checkoutOrderSummary: document.getElementById('checkoutOrderSummary'),
+    checkoutName: document.getElementById('checkoutName'),
+    checkoutNameError: document.getElementById('checkoutNameError'),
+    checkoutPhone: document.getElementById('checkoutPhone'),
+    checkoutPhoneError: document.getElementById('checkoutPhoneError'),
+    checkoutLocation: document.getElementById('checkoutLocation'),
+    checkoutLocationError: document.getElementById('checkoutLocationError'),
+    checkoutTotal: document.getElementById('checkoutTotal'),
+    checkoutSubmitBtn: document.getElementById('checkoutSubmitBtn'),
+
     filterChips: document.getElementById('filterChips'),
     productGrid: document.getElementById('productGrid'),
     loadMoreBtn: document.getElementById('loadMoreBtn'),
@@ -225,6 +238,8 @@
     dom.cartClose.addEventListener('click', closeCart);
     dom.cartScrim.addEventListener('click', closeCart);
     dom.checkoutBtn.addEventListener('click', handleCheckout);
+    dom.checkoutBackBtn.addEventListener('click', closeCheckoutView);
+    dom.checkoutView.addEventListener('submit', submitCheckoutForm);
 
     dom.cartItems.addEventListener('click', (e) => {
       const incBtn = e.target.closest('[data-cart-inc]');
@@ -254,6 +269,8 @@
     dom.cartTrigger.setAttribute('aria-expanded', 'false');
     document.body.classList.remove('drawer-is-open');
     setTimeout(() => { dom.cartScrim.hidden = true; }, 260);
+    // Always return to the cart view (not the form) the next time it opens.
+    closeCheckoutView();
   }
 
   function addToCart(product, size = null, quantity = 1) {
@@ -361,30 +378,81 @@
   }
 
   /* ======================================================= */
-  /* CHECKOUT — logs order to Supabase, then hands off to      */
-  /* WhatsApp with a prefilled order summary. The Supabase      */
-  /* write never blocks the WhatsApp handoff: if it fails, the  */
-  /* customer's order still reaches the owner via WhatsApp.     */
+  /* CHECKOUT — opens an in-drawer details form (replacing the */
+  /* old prompt() dialogs), then logs the order to Supabase and */
+  /* hands off to WhatsApp with a prefilled order summary. The  */
+  /* Supabase write never blocks the WhatsApp handoff: if it    */
+  /* fails, the customer's order still reaches the owner via    */
+  /* WhatsApp.                                                   */
   /* ======================================================= */
-  async function handleCheckout() {
+  function handleCheckout() {
     if (state.cart.length === 0) return;
+    openCheckoutView();
+  }
 
-    const name = prompt('Your full name for this order:');
-    if (!name) return;
-    const phoneRaw = prompt('Your phone number (e.g. 07XXXXXXXX):');
-    if (!phoneRaw) return;
+  function openCheckoutView() {
+    dom.cartDrawerTitle.textContent = 'Checkout';
+    dom.cartItems.hidden = true;
+    dom.cartFooter.hidden = true;
+    dom.checkoutView.hidden = false;
 
-    if (!isValidKenyanPhone(phoneRaw)) {
-      showToast('Please enter a valid Kenyan mobile number (e.g. 0712345678 or 254712345678).', 'error');
-      return;
+    const itemsSummary = state.cart.map((i) =>
+      `${i.name}${i.size ? ` (${i.size})` : ''} × ${i.quantity}`
+    ).join(', ');
+    dom.checkoutOrderSummary.textContent = itemsSummary;
+    dom.checkoutTotal.textContent = BaariDB.formatCurrency(cartSubtotal());
+
+    clearCheckoutErrors();
+  }
+
+  function closeCheckoutView() {
+    dom.cartDrawerTitle.textContent = 'Your Cart';
+    dom.checkoutView.hidden = true;
+    dom.cartItems.hidden = false;
+    dom.cartFooter.hidden = state.cart.length === 0;
+  }
+
+  function clearCheckoutErrors() {
+    [dom.checkoutName, dom.checkoutPhone, dom.checkoutLocation].forEach((el) => el.classList.remove('is-invalid'));
+    [dom.checkoutNameError, dom.checkoutPhoneError, dom.checkoutLocationError].forEach((el) => { el.textContent = ''; });
+  }
+
+  function setFieldError(inputEl, errorEl, message) {
+    inputEl.classList.toggle('is-invalid', Boolean(message));
+    errorEl.textContent = message || '';
+  }
+
+  async function submitCheckoutForm(e) {
+    e.preventDefault();
+    clearCheckoutErrors();
+
+    const name = dom.checkoutName.value.trim();
+    const phoneRaw = dom.checkoutPhone.value.trim();
+    const location = dom.checkoutLocation.value.trim();
+
+    let hasError = false;
+    if (!name) {
+      setFieldError(dom.checkoutName, dom.checkoutNameError, 'Please enter your full name.');
+      hasError = true;
     }
+    if (!phoneRaw) {
+      setFieldError(dom.checkoutPhone, dom.checkoutPhoneError, 'Please enter your phone number.');
+      hasError = true;
+    } else if (!isValidKenyanPhone(phoneRaw)) {
+      setFieldError(dom.checkoutPhone, dom.checkoutPhoneError, 'Enter a valid Kenyan number, e.g. 0712345678.');
+      hasError = true;
+    }
+    if (!location) {
+      setFieldError(dom.checkoutLocation, dom.checkoutLocationError, 'Please enter a delivery or pickup location.');
+      hasError = true;
+    }
+    if (hasError) return;
+
     const phone = normalizeKenyanPhone(phoneRaw);
-    const location = prompt('Delivery / pickup location in Kimana area:') || '';
-
-    setBtnLoading(dom.checkoutBtn, true);
-
     const total = cartSubtotal();
     const cartSnapshot = state.cart.slice();
+
+    setBtnLoading(dom.checkoutSubmitBtn, true);
 
     try {
       await BaariDB.submitOrder({
@@ -408,8 +476,10 @@
     persistCart();
     renderCart();
     renderCartBadge();
+    dom.checkoutView.reset();
+    closeCheckoutView();
     closeCart();
-    setBtnLoading(dom.checkoutBtn, false);
+    setBtnLoading(dom.checkoutSubmitBtn, false);
     showToast('Redirecting to WhatsApp to confirm your order…', 'success');
   }
 
