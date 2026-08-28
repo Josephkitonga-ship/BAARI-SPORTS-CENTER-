@@ -359,6 +359,77 @@ function populateCategorySelect(selectedId) {
   ).join('');
 }
 
+/* Size options per category slug. Boots use shoe sizing (numeric),
+   clothing categories use standard letter sizing, and Accessories has
+   no sizing at all — most accessories (shin guards, bottles, gloves)
+   are one-size, so the field disappears rather than forcing a choice. */
+const CATEGORY_SIZE_SETS = {
+  boots: Array.from({ length: 45 - 38 + 1 }, (_, i) => String(38 + i)), // 38–45
+  jerseys: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
+  training: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
+  'team-kits': ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
+  accessories: [], // no size picker shown for this category
+};
+
+let _selectedSizes = [];
+
+function getCategorySlugById(categoryId) {
+  return _productCategories.find((c) => c.id === categoryId)?.slug || null;
+}
+
+function renderSizePicker(categoryId, preselected = []) {
+  const slug = getCategorySlugById(categoryId);
+  const options = CATEGORY_SIZE_SETS[slug] ?? null; // null = unknown category, fall back to free choice
+
+  _selectedSizes = preselected.slice();
+
+  const groupEl = $('productSizesGroup');
+  const pickerEl = $('productSizePicker');
+  const labelEl = $('productSizesLabel');
+  const hintEl = $('productSizesHint');
+
+  if (slug === 'accessories') {
+    groupEl.hidden = true;
+    _selectedSizes = [];
+    return;
+  }
+  groupEl.hidden = false;
+
+  if (!options) {
+    pickerEl.innerHTML = '<p class="size-picker-empty">Select a category to see size options.</p>';
+    labelEl.textContent = 'Sizes';
+    hintEl.textContent = '';
+    return;
+  }
+
+  labelEl.textContent = slug === 'boots' ? 'Shoe Sizes' : 'Sizes';
+  hintEl.textContent = 'Tap to select every size currently in stock.';
+  pickerEl.innerHTML = options.map((size) =>
+    `<button type="button" class="size-chip${_selectedSizes.includes(size) ? ' is-selected' : ''}" data-size="${escapeHTML(size)}">${escapeHTML(size)}</button>`
+  ).join('');
+}
+
+$('productSizePicker')?.addEventListener('click', (e) => {
+  const chip = e.target.closest('.size-chip');
+  if (!chip) return;
+
+  const size = chip.dataset.size;
+  const idx = _selectedSizes.indexOf(size);
+  if (idx >= 0) {
+    _selectedSizes.splice(idx, 1);
+    chip.classList.remove('is-selected');
+  } else {
+    _selectedSizes.push(size);
+    chip.classList.add('is-selected');
+  }
+});
+
+$('productCategory')?.addEventListener('change', (e) => {
+  // Switching category clears the previous selection — sizes rarely
+  // carry over cleanly between e.g. Boots and Jerseys.
+  renderSizePicker(e.target.value, []);
+});
+
 const openProductModal = async (product = null) => {
   await ensureCategoriesLoaded();
 
@@ -368,7 +439,8 @@ const openProductModal = async (product = null) => {
     return;
   }
 
-  populateCategorySelect(product?.category_id || product?.categories?.id || null);
+  const initialCategoryId = product?.category_id || product?.categories?.id || _productCategories[0].id;
+  populateCategorySelect(initialCategoryId);
 
   $('productFormError').textContent = '';
   $('productModalTitle').textContent = product ? 'Edit Product' : 'Add Product';
@@ -378,11 +450,11 @@ const openProductModal = async (product = null) => {
   $('productPrice').value = product?.price ?? '';
   $('productSalePrice').value = product?.sale_price ?? '';
   $('productStock').value = product?.stock_count ?? 0;
-  $('productSizes').value = (product?.sizes || []).join(', ');
   $('productImage').value = product?.image_url || '';
   $('productIsNew').checked = !!product?.is_new;
   $('productActive').checked = product ? !!product.active : true;
 
+  renderSizePicker(initialCategoryId, product?.sizes || []);
   resetImageUploadWidget(product?.image_url || null);
 
   $('productModalOverlay').hidden = false;
@@ -524,7 +596,7 @@ $('productForm')?.addEventListener('submit', async (e) => {
   const price = Number($('productPrice').value);
   const sale_price = $('productSalePrice').value ? Number($('productSalePrice').value) : null;
   const stock_count = Number($('productStock').value);
-  const sizes = $('productSizes').value.split(',').map((s) => s.trim()).filter(Boolean);
+  const sizes = _selectedSizes.slice();
   const image_url = $('productImage').value.trim();
   const is_new = $('productIsNew').checked;
   const active = $('productActive').checked;

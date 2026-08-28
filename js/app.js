@@ -113,7 +113,7 @@
     setFooterYear();
 
     if (!BaariDB.isConfigured()) {
-      dom.liveStripText.textContent = 'Store backend not connected yet — showing offline mode.';
+      dom.liveStripText.textContent = 'Store backend not connected yet. Showing offline mode.';
     }
   }
 
@@ -292,7 +292,15 @@
 
     persistCart();
     renderCartBadge();
+    pulseCartBadge();
     showToast(`${product.name} added to cart`, 'success');
+  }
+
+  function pulseCartBadge() {
+    dom.cartBadge.classList.remove('is-pulsing');
+    // Force reflow so the animation can restart on rapid, repeated adds.
+    void dom.cartBadge.offsetWidth;
+    dom.cartBadge.classList.add('is-pulsing');
   }
 
   function updateCartQuantity(productId, size, delta) {
@@ -489,12 +497,12 @@
     ).join('\n');
 
     const message = [
-      `🛒 *NEW ORDER — ${CFG.STORE.NAME.toUpperCase()}*`, '─────────────────────', '',
+      `🛒 *NEW ORDER: ${CFG.STORE.NAME.toUpperCase()}*`, '─────────────────────', '',
       '👤 *Customer Details*', `Name: ${name}`, `Phone: ${phone}`, `Delivery/Pickup: ${location}`, '',
       '📦 *Order Summary*', '─────────────────────', lines,
       '─────────────────────', `*TOTAL: ${BaariDB.formatCurrency(total)}*`, '',
       '✅ Please confirm availability and payment details.', '',
-      `— Sent via ${CFG.STORE.NAME}`,
+      `Sent via ${CFG.STORE.NAME}`,
     ].join('\n');
 
     window.open(`https://wa.me/${CFG.STORE.WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');
@@ -840,7 +848,7 @@
     };
 
     const message = [
-      `🏆 *CUSTOM KIT REQUEST — ${CFG.STORE.NAME.toUpperCase()}*`, '─────────────────────', '',
+      `🏆 *CUSTOM KIT REQUEST: ${CFG.STORE.NAME.toUpperCase()}*`, '─────────────────────', '',
       '👤 *Customer Details*', `Name: ${name}`, `Phone: ${phone}`, '',
       '📦 *Kit Details*', '─────────────────────',
       `Garment: ${garmentLabels[garment] || garment}`,
@@ -850,7 +858,7 @@
       '─────────────────────',
       `*Estimated Total: ${BaariDB.formatCurrency(estimatedTotal)}*`, '',
       '✅ Please confirm the final price and delivery timeline.', '',
-      `— Sent via ${CFG.STORE.NAME}`,
+      `Sent via ${CFG.STORE.NAME}`,
     ].filter(Boolean).join('\n');
 
     window.open(`https://wa.me/${CFG.STORE.WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');

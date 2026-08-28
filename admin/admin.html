@@ -239,9 +239,10 @@
           <label class="form-label" for="productStock">Stock Count</label>
           <input class="form-input" type="number" id="productStock" min="0" step="1" required />
         </div>
-        <div class="form-group">
-          <label class="form-label" for="productSizes">Sizes <span class="form-optional">(comma-separated, e.g. S, M, L, XL)</span></label>
-          <input class="form-input" type="text" id="productSizes" placeholder="S, M, L, XL" />
+        <div class="form-group" id="productSizesGroup">
+          <label class="form-label" id="productSizesLabel">Sizes</label>
+          <div class="size-picker" id="productSizePicker"></div>
+          <p class="admin-panel-hint" id="productSizesHint" style="margin:4px 0 0;"></p>
         </div>
         <div class="form-group">
           <label class="form-label" for="productImageFile">Product Photo</label>

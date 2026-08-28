@@ -284,6 +284,11 @@ h1, h2, h3, h4 {
   backdrop-filter: blur(16px) saturate(150%);
   -webkit-backdrop-filter: blur(16px) saturate(150%);
   border-bottom: 1px solid var(--surface-border);
+  transition: box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.site-header.is-scrolled {
+  box-shadow: 0 8px 24px -12px rgba(0, 0, 0, 0.6);
 }
 
 .header-inner {
@@ -341,6 +346,16 @@ h1, h2, h3, h4 {
   align-items: center;
   justify-content: center;
   line-height: 1;
+}
+
+.cart-badge.is-pulsing {
+  animation: cart-badge-pulse 0.4s var(--ease-out);
+}
+
+@keyframes cart-badge-pulse {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.35); }
+  100% { transform: scale(1); }
 }
 
 /* Menu trigger (hamburger) */

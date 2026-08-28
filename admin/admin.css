@@ -494,3 +494,31 @@ textarea.form-input { resize: vertical; min-height: 72px; }
 .image-upload-status.is-uploading { color: var(--accent); }
 .image-upload-status.is-error { color: var(--danger); }
 .image-upload-status.is-success { color: #37D67A; }
+
+/* ── CATEGORY-AWARE SIZE PICKER ───────────────────────────── */
+.size-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.size-picker-empty {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+}
+.size-chip {
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--surface-border);
+  background: var(--surface-raised);
+  color: var(--text-secondary);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out);
+}
+.size-chip:hover { border-color: var(--text-secondary); }
+.size-chip.is-selected {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(200, 255, 0, 0.08);
+}

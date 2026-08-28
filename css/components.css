@@ -228,11 +228,25 @@
   flex-direction: column;
   position: relative;
   transition: transform var(--dur-fast) var(--ease-out),
-              border-color var(--dur-fast) var(--ease-out);
+              border-color var(--dur-fast) var(--ease-out),
+              box-shadow var(--dur-fast) var(--ease-out);
 }
 
 .product-card:active {
   transform: scale(0.98);
+}
+
+/* Hover-lift only for devices that actually hover (mouse/trackpad) —
+   guarded so touch devices never get a "stuck" hover state. */
+@media (hover: hover) and (pointer: fine) {
+  .product-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent);
+    box-shadow: 0 12px 24px -12px rgba(0, 0, 0, 0.5);
+  }
+  .product-card:hover .product-card-media img {
+    transform: scale(1.04);
+  }
 }
 
 .product-card-media {
@@ -655,12 +669,60 @@ body.drawer-is-open {
 
 /* -------------------- TOUCH HIT-TARGET SAFETY -------------------- */
 @media (pointer: coarse) {
-  .icon-btn,
+  .icon-btn {
+    width: 44px;
+    height: 44px;
+  }
+
   .chip,
   .sub-nav-item,
+  .qv-size-btn {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* .qty-btn has a deliberate small visual size (26px) that looks right
+     inline in the cart — bumping its box to 44px would crowd that layout.
+     Expand just the tappable hit area via an invisible pseudo-element. */
   .qty-btn {
-    min-width: 40px;
-    min-height: 40px;
+    position: relative;
+  }
+  .qty-btn::after {
+    content: '';
+    position: absolute;
+    inset: 50%;
+    width: 44px;
+    height: 44px;
+    transform: translate(-50%, -50%);
+  }
+
+  /* .wishlist-btn sits inside an overflow:hidden card-media container,
+     so an oversized pseudo-element hitbox would get clipped at the
+     card edge — the one direction most likely to be mis-tapped. Grow
+     the real button size instead, and move it slightly inward so the
+     larger hit area still clears the edge. */
+  .wishlist-btn {
+    width: 40px;
+    height: 40px;
+    top: 4px;
+    right: 4px;
+  }
+  .wishlist-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* Text links keep their natural inline layout — grow the tappable
+     area with padding instead of forcing a centered box, or short
+     labels like "Remove" / "← Back to cart" would visually distort. */
+  .cart-line-remove,
+  .checkout-back-link {
+    display: inline-block;
+    padding: 10px 2px;
+    margin: -10px -2px;
   }
 }
 
