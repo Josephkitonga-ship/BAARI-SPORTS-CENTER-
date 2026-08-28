@@ -42,6 +42,16 @@ const BaariDB = (() => {
    * Fetch a page of products, optionally filtered by category
    * slug, search term, and a named filter chip (in-stock / new / sale).
    */
+  let _categorySlugToId = null;
+
+  async function resolveCategoryId(slug) {
+    if (!_categorySlugToId) {
+      const { data } = await client.from(TABLES.CATEGORIES).select('id, slug');
+      _categorySlugToId = new Map((data || []).map((c) => [c.slug, c.id]));
+    }
+    return _categorySlugToId.get(slug) || null;
+  }
+
   async function fetchProducts({
     page = 1,
     perPage = BAARI_CONFIG.UX.PRODUCTS_PAGE_SIZE,
@@ -57,8 +67,18 @@ const BaariDB = (() => {
         .select('*, categories(slug, label)', { count: 'exact' })
         .eq('active', true);
 
+      // Filtering by a joined table's column via dotted .eq() isn't valid
+      // PostgREST usage through the JS client — it silently returns no
+      // rows instead of erroring. Resolve the slug to the real
+      // products.category_id (a plain column on the base table) first.
       if (category && category !== 'all') {
-        q = q.eq('categories.slug', category);
+        const categoryId = await resolveCategoryId(category);
+        if (categoryId) {
+          q = q.eq('category_id', categoryId);
+        } else {
+          // Unknown category slug — no products can match, skip the query.
+          return { items: [], totalItems: 0, page, hasMore: false };
+        }
       }
       if (query && query.trim()) {
         const term = query.trim();
