@@ -157,21 +157,30 @@ function renderOrderFeed(container, orders, { compact = false } = {}) {
   container.querySelectorAll('.status-select').forEach((sel) =>
     sel.addEventListener('change', () => updateOrderStatus(sel.dataset.id, sel.value))
   );
-  container.querySelectorAll('.wa-update-btn').forEach((btn) =>
+  container.querySelectorAll('.wa-update-btn[data-id]').forEach((btn) =>
     btn.addEventListener('click', () => sendOrderWhatsAppUpdate(btn.dataset.id, orders))
   );
 }
 
+const CONTACT_PREFERENCE_BADGE = {
+  whatsapp: '💬 WhatsApp',
+  call: '📞 Requested a callback',
+  email: '✉️ Email',
+};
+
 function renderOrderCard(o, compact) {
   const time = new Date(o.created_at).toLocaleTimeString('en-KE', { hour: '2-digit', minute: '2-digit' });
   const itemsSummary = (o.items || []).map((i) => `${i.name}${i.size ? ` (${i.size})` : ''} × ${i.qty}`).join(', ');
+  const contactBadge = CONTACT_PREFERENCE_BADGE[o.contact_preference] || CONTACT_PREFERENCE_BADGE.whatsapp;
+  const needsCallback = o.contact_preference === 'call';
 
   return `
-    <article class="order-card" data-id="${o.id}">
+    <article class="order-card${needsCallback ? ' order-card--callback' : ''}" data-id="${o.id}">
       <div class="order-card-top">
         <div>
           <p class="order-card-customer">${escapeHTML(o.customer_name)}</p>
           <p class="order-card-meta">${escapeHTML(o.phone)} · ${escapeHTML(o.location)}</p>
+          <p class="order-card-contact">${contactBadge}</p>
         </div>
         <span class="order-card-time">${time}</span>
       </div>
@@ -184,7 +193,9 @@ function renderOrderCard(o, compact) {
               ${ORDER_STATUS_OPTIONS.map((s) => `<option value="${s}"${s === o.status ? ' selected' : ''}>${s.charAt(0).toUpperCase() + s.slice(1)}</option>`).join('')}
             </select>
           ` : `<span class="admin-table-link">${escapeHTML(o.status)}</span>`}
-          <button class="wa-update-btn" data-id="${o.id}" type="button">WhatsApp Update</button>
+          ${needsCallback
+            ? `<a class="wa-update-btn" href="tel:${escapeHTML(o.phone)}">Call Customer</a>`
+            : `<button class="wa-update-btn" data-id="${o.id}" type="button">WhatsApp Update</button>`}
         </div>
       </div>
     </article>`;

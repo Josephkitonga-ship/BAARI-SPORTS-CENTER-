@@ -36,6 +36,7 @@ const BAARI_CONFIG = Object.freeze({
     NAME: 'Baari Sports Center',
     LOCATION: 'Kimana Town, Oloitokitok Sub-County, Kajiado County',
     WHATSAPP_NUMBER: '254702453813', // digits only, no + prefix
+    SUPPORT_EMAIL: 'BaariSportscentre01@gmail.com',
     CURRENCY: 'KES',
     CURRENCY_LOCALE: 'en-KE',
   }),

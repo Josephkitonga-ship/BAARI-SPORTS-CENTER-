@@ -228,6 +228,8 @@ textarea.form-input { resize: vertical; min-height: 72px; }
 }
 .order-card-customer { font-weight: 700; font-size: var(--fs-body); }
 .order-card-meta { font-size: var(--fs-xs); color: var(--text-muted); margin-top: 2px; }
+.order-card-contact { font-size: var(--fs-xs); color: var(--text-secondary); margin-top: 4px; font-weight: 600; }
+.order-card--callback { border-color: rgba(255, 176, 32, 0.4); }
 .order-card-time { font-size: var(--fs-xs); color: var(--text-muted); white-space: nowrap; }
 .order-card-items { font-size: var(--fs-sm); color: var(--text-secondary); line-height: 1.6; }
 .order-card-bottom {

@@ -157,7 +157,7 @@ const BaariDB = (() => {
    * before dispatching, same as the price shown at handoff to
    * WhatsApp is a customer-facing summary, not a payment charge.
    */
-  async function submitOrder({ items, customer, total, notes }) {
+  async function submitOrder({ items, customer, total, notes, contactPreference }) {
     if (!Array.isArray(items) || items.length === 0) {
       throw new Error('Cannot submit an empty cart.');
     }
@@ -173,6 +173,7 @@ const BaariDB = (() => {
       .insert({
         customer_name: customer.name,
         phone: normalizePhone(customer.phone),
+        email: customer.email || null,
         location: customer.location,
         notes: notes || null,
         items: items.map((i) => ({
@@ -184,6 +185,7 @@ const BaariDB = (() => {
         })),
         total: Number(total) || 0,
         status: 'new',
+        contact_preference: contactPreference || 'whatsapp',
       })
       .select()
       .single();

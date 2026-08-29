@@ -334,16 +334,38 @@
         <p class="field-error" id="checkoutLocationError"></p>
       </div>
 
+      <div class="form-group">
+        <label class="form-label">How should we confirm your order?</label>
+        <div class="contact-method-picker" id="contactMethodPicker">
+          <button type="button" class="contact-method-btn is-selected" data-contact="whatsapp">
+            <span class="contact-method-icon">💬</span> WhatsApp
+          </button>
+          <button type="button" class="contact-method-btn" data-contact="call">
+            <span class="contact-method-icon">📞</span> Call Me
+          </button>
+          <button type="button" class="contact-method-btn" data-contact="email">
+            <span class="contact-method-icon">✉️</span> Email
+          </button>
+        </div>
+        <input type="hidden" id="checkoutContactPreference" value="whatsapp" />
+      </div>
+
+      <div class="form-group" id="checkoutEmailGroup" hidden>
+        <label class="form-label" for="checkoutEmail">Email Address</label>
+        <input class="form-input" type="email" id="checkoutEmail" placeholder="you@example.com" autocomplete="email" />
+        <p class="field-error" id="checkoutEmailError"></p>
+      </div>
+
       <div class="checkout-total-row">
         <span>Total</span>
         <span id="checkoutTotal">KES 0</span>
       </div>
 
       <button class="btn btn-accent btn-block" type="submit" id="checkoutSubmitBtn">
-        <span class="btn-label">Place Order</span>
+        <span class="btn-label" id="checkoutSubmitLabel">Place Order via WhatsApp</span>
         <span class="btn-spinner" hidden></span>
       </button>
-      <p class="cart-note">Order details are sent straight to our WhatsApp for confirmation.</p>
+      <p class="cart-note" id="checkoutContactNote">Order details are sent straight to our WhatsApp for confirmation.</p>
     </form>
   </aside>
 

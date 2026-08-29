@@ -68,6 +68,13 @@
     checkoutLocationError: document.getElementById('checkoutLocationError'),
     checkoutTotal: document.getElementById('checkoutTotal'),
     checkoutSubmitBtn: document.getElementById('checkoutSubmitBtn'),
+    checkoutSubmitLabel: document.getElementById('checkoutSubmitLabel'),
+    checkoutContactNote: document.getElementById('checkoutContactNote'),
+    contactMethodPicker: document.getElementById('contactMethodPicker'),
+    checkoutContactPreference: document.getElementById('checkoutContactPreference'),
+    checkoutEmailGroup: document.getElementById('checkoutEmailGroup'),
+    checkoutEmail: document.getElementById('checkoutEmail'),
+    checkoutEmailError: document.getElementById('checkoutEmailError'),
 
     filterChips: document.getElementById('filterChips'),
     productGrid: document.getElementById('productGrid'),
@@ -240,6 +247,11 @@
     dom.checkoutBtn.addEventListener('click', handleCheckout);
     dom.checkoutBackBtn.addEventListener('click', closeCheckoutView);
     dom.checkoutView.addEventListener('submit', submitCheckoutForm);
+    dom.contactMethodPicker.addEventListener('click', (e) => {
+      const btn = e.target.closest('.contact-method-btn');
+      if (!btn) return;
+      selectContactMethod(btn.dataset.contact);
+    });
 
     dom.cartItems.addEventListener('click', (e) => {
       const incBtn = e.target.closest('[data-cart-inc]');
@@ -410,7 +422,37 @@
     dom.checkoutOrderSummary.textContent = itemsSummary;
     dom.checkoutTotal.textContent = BaariDB.formatCurrency(cartSubtotal());
 
+    selectContactMethod('whatsapp');
     clearCheckoutErrors();
+  }
+
+  const CONTACT_METHOD_COPY = {
+    whatsapp: {
+      label: 'Place Order via WhatsApp',
+      note: 'Order details are sent straight to our WhatsApp for confirmation.',
+    },
+    call: {
+      label: 'Place Order & Request Callback',
+      note: "We'll save your order and call you back to confirm.",
+    },
+    email: {
+      label: 'Place Order via Email',
+      note: 'Order details will open in your email app to send to us.',
+    },
+  };
+
+  function selectContactMethod(method) {
+    dom.checkoutContactPreference.value = method;
+
+    dom.contactMethodPicker.querySelectorAll('.contact-method-btn').forEach((btn) => {
+      btn.classList.toggle('is-selected', btn.dataset.contact === method);
+    });
+
+    dom.checkoutEmailGroup.hidden = method !== 'email';
+
+    const copy = CONTACT_METHOD_COPY[method];
+    dom.checkoutSubmitLabel.textContent = copy.label;
+    dom.checkoutContactNote.textContent = copy.note;
   }
 
   function closeCheckoutView() {
@@ -421,8 +463,8 @@
   }
 
   function clearCheckoutErrors() {
-    [dom.checkoutName, dom.checkoutPhone, dom.checkoutLocation].forEach((el) => el.classList.remove('is-invalid'));
-    [dom.checkoutNameError, dom.checkoutPhoneError, dom.checkoutLocationError].forEach((el) => { el.textContent = ''; });
+    [dom.checkoutName, dom.checkoutPhone, dom.checkoutLocation, dom.checkoutEmail].forEach((el) => el.classList.remove('is-invalid'));
+    [dom.checkoutNameError, dom.checkoutPhoneError, dom.checkoutLocationError, dom.checkoutEmailError].forEach((el) => { el.textContent = ''; });
   }
 
   function setFieldError(inputEl, errorEl, message) {
@@ -437,6 +479,8 @@
     const name = dom.checkoutName.value.trim();
     const phoneRaw = dom.checkoutPhone.value.trim();
     const location = dom.checkoutLocation.value.trim();
+    const contactMethod = dom.checkoutContactPreference.value;
+    const email = dom.checkoutEmail.value.trim();
 
     let hasError = false;
     if (!name) {
@@ -453,6 +497,15 @@
     if (!location) {
       setFieldError(dom.checkoutLocation, dom.checkoutLocationError, 'Please enter a delivery or pickup location.');
       hasError = true;
+    }
+    if (contactMethod === 'email') {
+      if (!email) {
+        setFieldError(dom.checkoutEmail, dom.checkoutEmailError, 'Please enter your email address.');
+        hasError = true;
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        setFieldError(dom.checkoutEmail, dom.checkoutEmailError, 'Enter a valid email address.');
+        hasError = true;
+      }
     }
     if (hasError) return;
 
@@ -471,14 +524,15 @@
           qty: i.quantity,
           price: i.price,
         })),
-        customer: { name, phone, location },
+        customer: { name, phone, location, email: email || null },
         total,
+        contactPreference: contactMethod,
       });
     } catch (err) {
-      console.error('[app] Order logging failed (WhatsApp handoff continues):', err);
+      console.error('[app] Order logging failed (contact handoff continues):', err);
     }
 
-    sendOrderToWhatsApp({ name, phone, location, items: cartSnapshot, total });
+    dispatchOrderHandoff(contactMethod, { name, phone, email, location, items: cartSnapshot, total });
 
     state.cart = [];
     persistCart();
@@ -488,7 +542,24 @@
     closeCheckoutView();
     closeCart();
     setBtnLoading(dom.checkoutSubmitBtn, false);
-    showToast('Redirecting to WhatsApp to confirm your order…', 'success');
+
+    const toastCopy = {
+      whatsapp: 'Redirecting to WhatsApp to confirm your order…',
+      call: "Order saved! We'll call you back shortly to confirm.",
+      email: 'Opening your email app to send your order…',
+    };
+    showToast(toastCopy[contactMethod], 'success');
+  }
+
+  function dispatchOrderHandoff(method, orderDetails) {
+    if (method === 'whatsapp') {
+      sendOrderToWhatsApp(orderDetails);
+    } else if (method === 'email') {
+      sendOrderToEmail(orderDetails);
+    }
+    // 'call' has no client-side handoff to trigger — the order is saved
+    // with contact_preference: 'call' and the owner calls the customer
+    // back using the number on file, visible in the admin Orders tab.
   }
 
   function sendOrderToWhatsApp({ name, phone, location, items, total }) {
@@ -506,6 +577,27 @@
     ].join('\n');
 
     window.open(`https://wa.me/${CFG.STORE.WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');
+  }
+
+  function sendOrderToEmail({ name, phone, email, location, items, total }) {
+    const lines = items.map((i) =>
+      `- ${i.name}${i.size ? ` (Size: ${i.size})` : ''} x${i.quantity} — ${BaariDB.formatCurrency(i.price * i.quantity)}`
+    ).join('\n');
+
+    const subject = `New Order: ${name}`;
+    const body = [
+      `New order from ${CFG.STORE.NAME}'s website.`, '',
+      `Customer: ${name}`, `Phone: ${phone}`, `Email: ${email}`, `Delivery/Pickup: ${location}`, '',
+      'Order Summary:', lines, '',
+      `Total: ${BaariDB.formatCurrency(total)}`, '',
+      'Please confirm availability and payment details.',
+    ].join('\n');
+
+    // Opens the customer's own email app with the order prefilled, addressed
+    // to the store. No email is actually sent by our system at this stage —
+    // that upgrade requires a verified domain and a transactional email
+    // provider, planned as a fast-follow after launch.
+    window.location.href = `mailto:${CFG.STORE.SUPPORT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   }
 
   /* ======================================================= */

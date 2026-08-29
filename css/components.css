@@ -867,3 +867,31 @@ body.drawer-is-open {
   font-weight: 800;
   font-size: 1.2rem;
 }
+
+/* -------------------- CONTACT METHOD PICKER (checkout) -------------------- */
+.contact-method-picker {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.contact-method-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 6px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--surface-border);
+  background: var(--surface-raised);
+  color: var(--text-secondary);
+  font-size: .68rem;
+  font-weight: 700;
+  text-align: center;
+  transition: border-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out);
+}
+.contact-method-icon { font-size: 1.1rem; }
+.contact-method-btn.is-selected {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(200, 255, 0, 0.08);
+}
