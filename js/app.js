@@ -85,6 +85,8 @@
     kitForm: document.getElementById('kitCalculatorForm'),
     kitPriceValue: document.getElementById('kitPriceValue'),
     kitSubmitBtn: document.getElementById('kitSubmitBtn'),
+    kitClubNameRow: document.getElementById('kitClubNameRow'),
+    kitClubName: document.getElementById('kitClubName'),
 
     quickViewScrim: document.getElementById('quickViewScrim'),
     quickViewModal: document.getElementById('quickViewModal'),
@@ -857,13 +859,61 @@
   /* CUSTOM KIT CALCULATOR — client estimate, then logs the    */
   /* request to Supabase and hands off to WhatsApp for the     */
   /* owner to confirm a final price.                            */
+  /*                                                             */
+  /* 'club-jersey' is a distinct garment type for customer-      */
+  /* requested named club/team jerseys (Arsenal, Man United,     */
+  /* etc.) that can't be pre-stocked as individual storefront    */
+  /* products. Selecting it reveals a required Club/Team Name    */
+  /* field, separate from the free-text notes box, so the owner  */
+  /* always sees exactly which club/team was requested.          */
   /* ======================================================= */
+  const GARMENT_LABELS = {
+    jersey: 'Match Jersey',
+    'club-jersey': 'Club Jerseys',
+    'training-tee': 'Training Tee',
+    tracksuit: 'Tracksuit Set',
+    shorts: 'Shorts',
+  };
+
+  const KIT_NOTES_PLACEHOLDER = {
+    'club-jersey': 'e.g. Sizes S x5, M x8, L x2, name+number on back, needed by 20th Aug',
+    default: 'e.g. Home kit, navy + gold, club badge on chest, needed by 20th Aug',
+  };
+
   function bindKitCalculatorEvents() {
     const inputs = dom.kitForm.querySelectorAll('select, input');
     inputs.forEach((el) => el.addEventListener('input', updateKitEstimate));
 
+    dom.kitForm.garment.addEventListener('change', () => {
+      toggleClubNameField();
+      updateKitNotesPlaceholder();
+    });
+
     dom.kitForm.addEventListener('submit', handleKitSubmit);
+
     updateKitEstimate();
+    toggleClubNameField();
+    updateKitNotesPlaceholder();
+  }
+
+  function isClubJerseySelected() {
+    return dom.kitForm.garment.value === 'club-jersey';
+  }
+
+  function toggleClubNameField() {
+    const showClubField = isClubJerseySelected();
+    dom.kitClubNameRow.hidden = !showClubField;
+    if (showClubField) {
+      dom.kitClubName.setAttribute('required', 'required');
+    } else {
+      dom.kitClubName.removeAttribute('required');
+      dom.kitClubName.value = '';
+    }
+  }
+
+  function updateKitNotesPlaceholder() {
+    const garment = dom.kitForm.garment.value;
+    dom.kitForm.notes.placeholder = KIT_NOTES_PLACEHOLDER[garment] || KIT_NOTES_PLACEHOLDER.default;
   }
 
   function calculateKitEstimate(garment, quantity, printing) {
@@ -893,6 +943,13 @@
     const quantity = Number(dom.kitForm.quantity.value);
     const printing = dom.kitForm.printing.value;
     const notes = dom.kitForm.notes.value;
+    const clubName = dom.kitClubName.value.trim();
+
+    if (isClubJerseySelected() && !clubName) {
+      showToast('Please enter the club or team name.', 'error');
+      dom.kitClubName.focus();
+      return;
+    }
 
     const name = prompt('Your name (for the quote):');
     if (!name) return;
@@ -915,6 +972,7 @@
         quantity,
         printing,
         notes,
+        clubName: isClubJerseySelected() ? clubName : null,
         customer: { name, phone },
         estimatedTotal,
       });
@@ -922,28 +980,30 @@
       console.error('[app] Kit request logging failed (WhatsApp handoff continues):', err);
     }
 
-    sendKitRequestToWhatsApp({ garment, quantity, printing, notes, name, phone, estimatedTotal });
+    sendKitRequestToWhatsApp({ garment, quantity, printing, notes, clubName, name, phone, estimatedTotal });
 
     showToast('Request sent! We\u2019ll confirm your final quote on WhatsApp.', 'success');
     dom.kitForm.reset();
+    toggleClubNameField();
+    updateKitNotesPlaceholder();
     updateKitEstimate();
     setBtnLoading(dom.kitSubmitBtn, false);
   }
 
-  function sendKitRequestToWhatsApp({ garment, quantity, printing, notes, name, phone, estimatedTotal }) {
-    const garmentLabels = {
-      jersey: 'Match Jersey', 'training-tee': 'Training Tee',
-      tracksuit: 'Tracksuit Set', shorts: 'Shorts',
-    };
+  function sendKitRequestToWhatsApp({ garment, quantity, printing, notes, clubName, name, phone, estimatedTotal }) {
     const printingLabels = {
       none: 'None', 'name-number': 'Name + Number', 'full-sponsor': 'Full Sponsor Set',
     };
+
+    const garmentLine = garment === 'club-jersey' && clubName
+      ? `Garment: ${GARMENT_LABELS[garment]} — ${clubName}`
+      : `Garment: ${GARMENT_LABELS[garment] || garment}`;
 
     const message = [
       `🏆 *CUSTOM KIT REQUEST: ${CFG.STORE.NAME.toUpperCase()}*`, '─────────────────────', '',
       '👤 *Customer Details*', `Name: ${name}`, `Phone: ${phone}`, '',
       '📦 *Kit Details*', '─────────────────────',
-      `Garment: ${garmentLabels[garment] || garment}`,
+      garmentLine,
       `Quantity: ${quantity}`,
       `Printing: ${printingLabels[printing] || printing}`,
       notes ? `Notes: ${notes}` : null,

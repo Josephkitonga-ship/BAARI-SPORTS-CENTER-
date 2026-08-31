@@ -47,13 +47,20 @@ const BAARI_CONFIG = Object.freeze({
   // calculator UI before the request is submitted. The store
   // owner reviews and sets the authoritative price from the
   // admin dashboard once the request lands.
+  //
+  // 'club-jersey' covers customer-requested named club/team
+  // jerseys (e.g. Arsenal, Manchester United) that can't be
+  // pre-stocked as individual storefront products — priced
+  // per unit like the other garments, quoted via the kit
+  // request flow instead of Add to Cart.
   // ---------------------------------------------------------
   KIT_PRICING: Object.freeze({
     BASE_UNIT_PRICE: Object.freeze({
       jersey: 1200,
+      'club-jersey': 550,
       'training-tee': 800,
       tracksuit: 2500,
-      shorts: 600,
+      shorts: 400,
     }),
     PRINTING_SURCHARGE: Object.freeze({
       none: 0,

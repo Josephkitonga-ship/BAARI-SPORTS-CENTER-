@@ -780,7 +780,7 @@ $('categoryForm')?.addEventListener('submit', async (e) => {
 
 /* ── KIT REQUESTS: LOAD + RENDER ─────────────────────────── */
 const KIT_STATUS_OPTIONS = ['new', 'quoted', 'confirmed', 'fulfilled'];
-const GARMENT_LABELS = { jersey: 'Match Jersey', 'training-tee': 'Training Tee', tracksuit: 'Tracksuit Set', shorts: 'Shorts' };
+const GARMENT_LABELS = { jersey: 'Match Jersey', 'club-jersey': 'Club Jerseys', 'training-tee': 'Training Tee', tracksuit: 'Tracksuit Set', shorts: 'Shorts' };
 const PRINTING_LABELS = { none: 'None', 'name-number': 'Name + Number', 'full-sponsor': 'Full Sponsor Set' };
 
 async function loadKitRequests() {
@@ -807,7 +807,7 @@ async function loadKitRequests() {
       <td>${date}</td>
       <td>${escapeHTML(k.customer_name)}</td>
       <td>${escapeHTML(k.phone)}</td>
-      <td>${escapeHTML(GARMENT_LABELS[k.garment] || k.garment)}</td>
+      <td>${escapeHTML(GARMENT_LABELS[k.garment] || k.garment)}${k.garment === 'club-jersey' && k.club_name ? `<br><span class="admin-table-sub">${escapeHTML(k.club_name)}</span>` : ''}</td>
       <td>${k.quantity}</td>
       <td>${escapeHTML(PRINTING_LABELS[k.printing] || k.printing)}</td>
       <td>${k.estimated_total ? kes(k.estimated_total) : '—'}</td>

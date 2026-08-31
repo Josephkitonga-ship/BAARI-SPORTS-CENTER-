@@ -198,12 +198,22 @@ const BaariDB = (() => {
   /* CUSTOM KIT REQUESTS                                      */
   /* ----------------------------------------------------- */
 
-  async function submitKitRequest({ garment, quantity, printing, notes, customer, estimatedTotal }) {
+  /**
+   * clubName is required when garment === 'club-jersey' (validated
+   * client-side in app.js before this is called) and stored in the
+   * dedicated club_name column — kept separate from notes so it always
+   * renders as its own field in the admin Kit Requests tab, rather than
+   * being buried inside free-text notes.
+   */
+  async function submitKitRequest({ garment, quantity, printing, notes, customer, estimatedTotal, clubName }) {
     if (!garment || !quantity || quantity < 5) {
       throw new Error('Custom kit orders require a minimum quantity of 5.');
     }
     if (!customer?.name || !customer?.phone) {
       throw new Error('Name and phone number are required for a kit quote.');
+    }
+    if (garment === 'club-jersey' && !clubName?.trim()) {
+      throw new Error('Club or team name is required for club jersey requests.');
     }
     if (!isConfigured) {
       throw new Error('Store backend is not connected yet.');
@@ -216,6 +226,7 @@ const BaariDB = (() => {
         quantity: Number(quantity),
         printing: printing || 'none',
         notes: notes || null,
+        club_name: clubName?.trim() || null,
         customer_name: customer.name,
         phone: normalizePhone(customer.phone),
         estimated_total: Number(estimatedTotal) || null,

@@ -203,10 +203,20 @@
           <label for="kitGarment">Garment Type</label>
           <select id="kitGarment" name="garment" required>
             <option value="jersey">Match Jersey</option>
+            <option value="club-jersey">Club Jerseys</option>
             <option value="training-tee">Training Tee</option>
             <option value="tracksuit">Tracksuit Set</option>
             <option value="shorts">Shorts</option>
           </select>
+        </div>
+
+        <!-- Only shown when Garment Type = Club Jerseys. Required in that
+             case since we can't stock every club's jersey as a product —
+             this tells the owner exactly which club/team design to source
+             or print. Hidden + non-required for every other garment. -->
+        <div class="form-row" id="kitClubNameRow" hidden>
+          <label for="kitClubName">Club / Team Name</label>
+          <input type="text" id="kitClubName" name="clubName" placeholder="e.g. Arsenal, Manchester United, Gor Mahia">
         </div>
 
         <div class="form-row form-row-split">
@@ -226,7 +236,7 @@
 
         <div class="form-row">
           <label for="kitNotes">Notes (colors, badge, deadline)</label>
-          <textarea id="kitNotes" name="notes" rows="3" placeholder="e.g. Home kit, navy + gold, club badge on chest, needed by 20th Aug"></textarea>
+          <textarea id="kitNotes" name="notes" rows="3"></textarea>
         </div>
 
         <div class="kit-price-preview" id="kitPricePreview" aria-live="polite">
