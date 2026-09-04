@@ -89,6 +89,74 @@ $('logoutBtn')?.addEventListener('click', async () => {
   showLogin();
 });
 
+/* ── PASSWORD SHOW/HIDE TOGGLE ────────────────────────────
+   Works on any password field paired with a toggle button that
+   has .icon-eye and .icon-eye-off SVG children — used on the
+   login form here, and reused as-is on reset-password.html. */
+function bindPasswordToggle(inputId, btnId) {
+  const input = $(inputId);
+  const btn = $(btnId);
+  if (!input || !btn) return;
+
+  const eyeIcon = btn.querySelector('.icon-eye');
+  const eyeOffIcon = btn.querySelector('.icon-eye-off');
+
+  btn.addEventListener('click', () => {
+    const isVisible = input.type === 'text';
+    input.type = isVisible ? 'password' : 'text';
+    btn.setAttribute('aria-pressed', String(!isVisible));
+    btn.setAttribute('aria-label', isVisible ? 'Show password' : 'Hide password');
+    if (eyeIcon) eyeIcon.hidden = !isVisible;
+    if (eyeOffIcon) eyeOffIcon.hidden = isVisible;
+  });
+}
+bindPasswordToggle('loginPassword', 'loginPasswordToggle');
+
+/* ── FORGOT PASSWORD ───────────────────────────────────────
+   Swaps the login card into an email-only "request reset link"
+   form. Supabase Auth handles the actual token generation and
+   email send — resetPasswordForEmail() below is all it takes
+   since Baari already runs on real Supabase Auth. The emailed
+   link lands on admin/reset-password.html, which calls
+   db.auth.updateUser({ password }) to finish the change. */
+const showForgotPasswordForm = () => {
+  $('loginForm').hidden = true;
+  $('forgotPasswordForm').hidden = false;
+  $('forgotPasswordError').textContent = '';
+  $('forgotPasswordSuccess').textContent = '';
+};
+const showSignInForm = () => {
+  $('forgotPasswordForm').hidden = true;
+  $('loginForm').hidden = false;
+};
+
+$('forgotPasswordLink')?.addEventListener('click', showForgotPasswordForm);
+$('backToSignInLink')?.addEventListener('click', showSignInForm);
+
+$('forgotPasswordForm')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = $('forgotEmail').value.trim();
+  const btn = $('forgotPasswordBtn');
+  const errEl = $('forgotPasswordError');
+  const successEl = $('forgotPasswordSuccess');
+  errEl.textContent = '';
+  successEl.textContent = '';
+  setBtnLoading(btn, true);
+
+  const { error } = await db.auth.resetPasswordForEmail(email, {
+    redirectTo: 'https://baarisportscentre.co.ke/admin/reset-password.html',
+  });
+
+  setBtnLoading(btn, false, 'Send Reset Link');
+
+  if (error) {
+    errEl.textContent = error.message || 'Failed to send reset link. Try again.';
+    return;
+  }
+  successEl.textContent = 'Check your email for a password reset link.';
+  $('forgotPasswordForm').reset();
+});
+
 /* ── TABS (desktop buttons + mobile select stay in sync) ──── */
 function activateTab(tabName) {
   document.querySelectorAll('.admin-tab').forEach((t) => t.classList.toggle('admin-tab--active', t.dataset.tab === tabName));

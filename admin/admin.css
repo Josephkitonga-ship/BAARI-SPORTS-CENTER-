@@ -56,6 +56,36 @@
 .form-input:focus { border-color: var(--accent); }
 textarea.form-input { resize: vertical; min-height: 72px; }
 
+/* ── PASSWORD FIELD (show/hide toggle) ───────────────────── */
+.password-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.password-field .form-input {
+  padding-right: 44px; /* room for the toggle button */
+}
+.password-toggle-btn {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.password-toggle-btn:hover { color: var(--text-secondary); }
+.password-toggle-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.password-toggle-btn svg { width: 18px; height: 18px; }
+
 /* ── LOGIN SCREEN ────────────────────────────────────────── */
 .admin-login-screen {
   min-height: 100svh;
@@ -93,6 +123,13 @@ textarea.form-input { resize: vertical; min-height: 72px; }
   min-height: 1.2em;
   margin-top: 8px;
 }
+.admin-login-success {
+  font-size: .75rem;
+  color: #37D67A;
+  text-align: center;
+  min-height: 1.2em;
+  margin-top: 8px;
+}
 .admin-login-back {
   display: block;
   text-align: center;
@@ -104,6 +141,21 @@ textarea.form-input { resize: vertical; min-height: 72px; }
   margin-top: 12px;
 }
 .admin-login-back:hover { color: var(--text-secondary); }
+.admin-login-forgot {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .03em;
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px 0 0;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.admin-login-forgot:hover { color: var(--accent); }
 
 /* ── ADMIN HEADER ────────────────────────────────────────── */
 .admin-header {

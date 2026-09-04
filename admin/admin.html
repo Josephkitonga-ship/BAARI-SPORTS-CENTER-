@@ -16,6 +16,8 @@
 
   <!-- ── LOGIN SCREEN ───────────────────────────────────────── -->
   <div class="admin-login-screen" id="loginScreen">
+
+    <!-- SIGN IN MODE -->
     <form class="admin-login-card" id="loginForm">
       <div class="admin-login-logo">
         <span class="logo-main">BAARI</span>
@@ -27,15 +29,51 @@
       </div>
       <div class="form-group">
         <label class="form-label" for="loginPassword">Password</label>
-        <input class="form-input" type="password" id="loginPassword" autocomplete="current-password" required />
+        <div class="password-field">
+          <input class="form-input" type="password" id="loginPassword" autocomplete="current-password" required />
+          <button class="password-toggle-btn" type="button" id="loginPasswordToggle" aria-label="Show password" aria-pressed="false">
+            <svg class="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+            <svg class="icon-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" hidden>
+              <path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-7 0-11-7-11-7a20.6 20.6 0 0 1 5.06-5.94M9.9 4.24A10.4 10.4 0 0 1 12 4c7 0 11 7 11 7a20.6 20.6 0 0 1-2.61 3.53M14.12 14.12a3 3 0 1 1-4.24-4.24"/>
+              <line x1="1" y1="1" x2="23" y2="23"/>
+            </svg>
+          </button>
+        </div>
       </div>
       <button class="btn btn--primary btn--full" type="submit" id="loginBtn">
         <span class="btn-label">Sign In</span>
         <span class="btn-spinner" hidden></span>
       </button>
       <p class="admin-login-error" id="loginError"></p>
+      <button type="button" class="admin-login-forgot" id="forgotPasswordLink">Forgot password?</button>
       <a href="../index.html" class="admin-login-back">← Back to Storefront</a>
     </form>
+
+    <!-- FORGOT PASSWORD MODE (hidden until "Forgot password?" is clicked) -->
+    <form class="admin-login-card" id="forgotPasswordForm" hidden>
+      <div class="admin-login-logo">
+        <span class="logo-main">BAARI</span>
+        <span class="logo-sub">Reset Password</span>
+      </div>
+      <p class="admin-panel-hint" style="text-align:center; margin-bottom:16px;">
+        Enter the email on your admin account and we'll send you a link to set a new password.
+      </p>
+      <div class="form-group">
+        <label class="form-label" for="forgotEmail">Email</label>
+        <input class="form-input" type="email" id="forgotEmail" autocomplete="username" required />
+      </div>
+      <button class="btn btn--primary btn--full" type="submit" id="forgotPasswordBtn">
+        <span class="btn-label">Send Reset Link</span>
+        <span class="btn-spinner" hidden></span>
+      </button>
+      <p class="admin-login-error" id="forgotPasswordError"></p>
+      <p class="admin-login-success" id="forgotPasswordSuccess"></p>
+      <button type="button" class="admin-login-back" id="backToSignInLink" style="background:none; border:none; width:100%; cursor:pointer;">← Back to Sign In</button>
+    </form>
+
   </div>
 
   <!-- ── ADMIN APP (hidden until authenticated) ─────────────── -->
