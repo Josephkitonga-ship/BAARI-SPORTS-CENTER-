@@ -157,6 +157,14 @@ textarea.form-input { resize: vertical; min-height: 72px; }
 }
 .admin-login-forgot:hover { color: var(--accent); }
 
+/* Same class of bug as .modal-scrim[hidden] below — the .admin-login-
+   screen flex container overrides the hidden attribute unless forced.
+   This was causing the Sign In and Forgot Password cards to render
+   side-by-side instead of one being hidden. */
+.admin-login-card[hidden] {
+  display: none !important;
+}
+
 /* ── ADMIN HEADER ────────────────────────────────────────── */
 .admin-header {
   position: sticky;
