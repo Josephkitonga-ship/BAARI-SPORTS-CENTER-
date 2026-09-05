@@ -232,7 +232,7 @@ function renderOrderFeed(container, orders, { compact = false } = {}) {
 
 const CONTACT_PREFERENCE_BADGE = {
   whatsapp: '💬 WhatsApp',
-  call: '📞 Requested a callback',
+  call: '📞 Called to order',
   email: '✉️ Email',
 };
 

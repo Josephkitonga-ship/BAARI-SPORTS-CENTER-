@@ -402,10 +402,14 @@
   /* ======================================================= */
   /* CHECKOUT — opens an in-drawer details form (replacing the */
   /* old prompt() dialogs), then logs the order to Supabase and */
-  /* hands off to WhatsApp with a prefilled order summary. The  */
-  /* Supabase write never blocks the WhatsApp handoff: if it    */
-  /* fails, the customer's order still reaches the owner via    */
-  /* WhatsApp.                                                   */
+  /* hands off per the chosen contact method: WhatsApp opens a  */
+  /* prefilled wa.me chat, Email opens the customer's mail app,  */
+  /* and "Call to Order" opens the phone dialer straight to the  */
+  /* shop's own number — the customer places the order live on   */
+  /* the call rather than waiting for a callback. The Supabase   */
+  /* write never blocks the handoff: if it fails, the customer's */
+  /* order still reaches the owner via whichever channel they    */
+  /* chose.                                                       */
   /* ======================================================= */
   function handleCheckout() {
     if (state.cart.length === 0) return;
@@ -434,8 +438,8 @@
       note: 'Order details are sent straight to our WhatsApp for confirmation.',
     },
     call: {
-      label: 'Place Order & Request Callback',
-      note: "We'll save your order and call you back to confirm.",
+      label: 'Call to Place Order',
+      note: "We'll save your order — tap below to call us and confirm it.",
     },
     email: {
       label: 'Place Order via Email',
@@ -547,7 +551,7 @@
 
     const toastCopy = {
       whatsapp: 'Redirecting to WhatsApp to confirm your order…',
-      call: "Order saved! We'll call you back shortly to confirm.",
+      call: 'Order saved! Opening your phone to call and confirm…',
       email: 'Opening your email app to send your order…',
     };
     showToast(toastCopy[contactMethod], 'success');
@@ -558,10 +562,9 @@
       sendOrderToWhatsApp(orderDetails);
     } else if (method === 'email') {
       sendOrderToEmail(orderDetails);
+    } else if (method === 'call') {
+      callShopToOrder();
     }
-    // 'call' has no client-side handoff to trigger — the order is saved
-    // with contact_preference: 'call' and the owner calls the customer
-    // back using the number on file, visible in the admin Orders tab.
   }
 
   function sendOrderToWhatsApp({ name, phone, location, items, total }) {
@@ -600,6 +603,19 @@
     // that upgrade requires a verified domain and a transactional email
     // provider, planned as a fast-follow after launch.
     window.location.href = `mailto:${CFG.STORE.SUPPORT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  }
+
+  /**
+   * "Call to Order" — the order has already been saved to Supabase with
+   * contact_preference: 'call' (same as every other method), so it shows
+   * up in the admin dashboard immediately. The only difference from
+   * WhatsApp/Email is the handoff target: instead of opening a chat or
+   * mail app, this opens the phone dialer straight to the shop's own
+   * number. The customer places/confirms the order live on that call —
+   * this replaces the old "we'll call you back" model entirely.
+   */
+  function callShopToOrder() {
+    window.location.href = `tel:${CFG.STORE.WHATSAPP_NUMBER}`;
   }
 
   /* ======================================================= */
